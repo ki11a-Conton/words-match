@@ -889,18 +889,18 @@
             }
 
             .match-grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-
-            .match-column {
+                grid-template-columns: 1fr 1fr;
                 gap: 16px;
             }
 
+            .match-column {
+                gap: 10px;
+            }
+
             .match-item {
-                padding: 20px 24px;
-                font-size: 18px;
-                min-height: 60px;
+                padding: 14px 12px;
+                font-size: 14px;
+                min-height: 50px;
             }
 
             .spelling-chinese {
@@ -950,27 +950,36 @@
         }
 
         @media (max-width: 480px) {
-            .match-item {
-                padding: 16px 20px;
-                font-size: 16px;
-                min-height: 50px;
-            }
-
-            .match-column {
+            .match-grid {
+                grid-template-columns: 1fr 1fr;
                 gap: 12px;
             }
 
-            .match-grid {
-                gap: 20px;
+            .match-column {
+                gap: 8px;
+            }
+
+            .match-item {
+                padding: 10px 8px;
+                font-size: 12px;
+                min-height: 44px;
+            }
+
+            .match-column-title {
+                font-size: 11px;
             }
 
             .stat-item {
-                min-width: 80px;
-                padding: 8px 10px;
+                min-width: 70px;
+                padding: 6px 8px;
             }
 
             .stat-value {
-                font-size: 18px;
+                font-size: 16px;
+            }
+
+            .stat-label {
+                font-size: 10px;
             }
 
             .mode-tab {
@@ -7022,11 +7031,4 @@
 
             document.getElementById('finalScore').textContent = score;
             document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
-            document.getElementById('finalStreak').textContent = maxStreak;
-            document.querySelector('.completion-title').textContent = `恭喜完成全部 ${totalRounds} 轮！`;
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+            document.getElementById('finalStreak').textContent = maxStr
