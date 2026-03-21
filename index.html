@@ -7031,4 +7031,11 @@
 
             document.getElementById('finalScore').textContent = score;
             document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
-            document.getElementById('finalStreak').textContent = maxStr
+            document.getElementById('finalStreak').textContent = maxStreak;
+            document.querySelector('.completion-title').textContent = `恭喜完成全部 ${totalRounds} 轮！`;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
