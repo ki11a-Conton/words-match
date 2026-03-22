@@ -1033,9 +1033,43 @@
                 font-size: 14px;
             }
 
-            /* 隐藏错误单词面板按钮 */
-            .wrong-words-toggle {
+            /* 移动端模式切换按钮 */
+            .mobile-mode-switch {
                 display: none;
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                padding: 12px 24px;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                color: white;
+                border: none;
+                border-radius: var(--radius-xl);
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+                transition: var(--transition-normal);
+            }
+
+            
+            .mobile-mode-switch:hover {
+                transform: translateX(-50%) translateY(-2px);
+                box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+            }
+            
+            .mobile-mode-switch svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            @media (max-width: 768px) {
+                .mobile-mode-switch {
+                    display: flex;
+                align-items: center;
+                    gap: 8px;
+                }
             }
         }
 
@@ -1673,6 +1707,126 @@
             margin-bottom: 12px;
             opacity: 0.5;
         }
+
+        /* 移动端底部导航栏 */
+        .mobile-tab-bar {
+            display: none;
+        }
+
+        /* 游戏容器视图切换 - 平滑过渡 */
+        .match-container,
+        .spelling-container {
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        }
+
+        .match-container:not(.active),
+        .spelling-container:not(.active) {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        .match-container.active,
+        .spelling-container.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-tab-bar {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-top: 1px solid var(--glass-border);
+                z-index: 1000;
+                padding: 8px 16px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .mobile-tab {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                padding: 8px 16px;
+                background: transparent;
+                border: none;
+                color: var(--text-secondary);
+                font-size: 12px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: var(--transition-normal);
+                border-radius: var(--radius-md);
+                position: relative;
+                font-family: inherit;
+            }
+
+            .mobile-tab svg {
+                width: 24px;
+                height: 24px;
+                transition: var(--transition-normal);
+            }
+
+            .mobile-tab.active {
+                color: var(--primary-light);
+            }
+
+            .mobile-tab.active::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 24px;
+                height: 3px;
+                background: linear-gradient(90deg, var(--primary), var(--primary-light));
+                border-radius: 2px;
+            }
+
+            .mobile-tab:hover {
+                color: var(--text-primary);
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .mobile-tab.active svg {
+                transform: scale(1.1);
+            }
+
+            /* 移动端游戏区域底部留出导航栏空间 */
+            .game-area {
+                padding-bottom: 100px;
+            }
+
+            /* 隐藏桌面端的模式切换 */
+            .mode-tabs {
+                display: none !important;
+            }
+
+            /* 隐藏错误单词面板按钮 */
+            .wrong-words-toggle {
+                display: none;
+            }
+
+            /* 隐藏单词库按钮 */
+            .word-bank-toggle {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="has-nyan-bar">
@@ -1934,6 +2088,22 @@
             </div>
         </div>
     </div>
+
+    <!-- 移动端底部导航栏 -->
+    <nav class="mobile-tab-bar" id="mobileTabBar">
+        <button class="mobile-tab active" data-mode="match">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+            </svg>
+            <span>单词匹配</span>
+        </button>
+        <button class="mobile-tab" data-mode="spelling">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <span>单词拼写</span>
+        </button>
+    </nav>
 
     <script>
 // 单词匹配游戏 - 词库数据
@@ -5390,7 +5560,13 @@ const wordLists = {
         }
 
         function setupEventListeners() {
+            // 桌面端模式切换按钮
             document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchMode(tab.dataset.mode));
+            });
+
+            // 移动端底部导航栏
+            document.querySelectorAll('.mobile-tab').forEach(tab => {
                 tab.addEventListener('click', () => switchMode(tab.dataset.mode));
             });
 
@@ -5600,17 +5776,42 @@ const wordLists = {
         }
 
         function switchMode(mode) {
+            // 状态保护：如果正在处理动画，拦截切换请求
+            if (isProcessing) {
+                console.log('正在处理中，请稍候再切换模式');
+                return;
+            }
+            
+            // 停止当前计时器
+            stopTimer();
+            
+            // 重置状态
+            selectedEnglish = null;
+            selectedChinese = null;
+            
             currentMode = mode;
+            
+            // 更新桌面端模式切换按钮状态
             document.querySelectorAll('.mode-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.mode === mode);
             });
+            
+            // 更新移动端底部导航栏状态
+            document.querySelectorAll('.mobile-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
 
-            document.getElementById('matchContainer').classList.toggle('active', mode === 'match');
-            document.getElementById('spellingContainer').classList.toggle('active', mode === 'spelling');
+            // 平滑切换视图
+            const matchContainer = document.getElementById('matchContainer');
+            const spellingContainer = document.getElementById('spellingContainer');
+            
+            matchContainer.classList.toggle('active', mode === 'match');
+            spellingContainer.classList.toggle('active', mode === 'spelling');
             document.getElementById('completionScreen').classList.remove('active');
 
             document.getElementById('gameModeTitle').textContent = mode === 'match' ? '单词匹配' : '单词拼写';
 
+            // 重新开始游戏
             startGame();
         }
 
