@@ -9,22 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-light: #60a5fa;
-            --primary-dark: #2563eb;
-            --success: #10b981;
-            --success-light: #34d399;
-            --error: #ef4444;
-            --error-light: #f87171;
-            --warning: #f59e0b;
-            --bg-gradient-start: #f8fafc;
-            --bg-gradient-end: #f1f5f9;
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(0, 0, 0, 0.06);
-            --glass-shadow: rgba(0, 0, 0, 0.05);
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --success: #059669;
+            --success-light: #10b981;
+            --error: #dc2626;
+            --error-light: #ef4444;
+            --warning: #d97706;
+            --bg-gradient-start: #eef2ff;
+            --bg-gradient-end: #e0e7ff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(79, 70, 229, 0.1);
+            --glass-shadow: rgba(79, 70, 229, 0.08);
+            --text-primary: #1e1b4b;
+            --text-secondary: #4338ca;
+            --text-muted: #6366f1;
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 20px;
@@ -74,14 +74,14 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.15;
+            opacity: 0.2;
             animation: float 20s ease-in-out infinite;
         }
 
         .bg-blob-1 {
             width: 600px;
             height: 600px;
-            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
             top: -200px;
             right: -200px;
         }
@@ -89,7 +89,7 @@
         .bg-blob-2 {
             width: 500px;
             height: 500px;
-            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
             bottom: -150px;
             left: -150px;
             animation-delay: -10s;
@@ -98,7 +98,7 @@
         .bg-blob-3 {
             width: 400px;
             height: 400px;
-            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -777,10 +777,12 @@
                 left: 0;
                 right: 0;
                 z-index: 100;
-                background: rgba(15, 23, 42, 0.95);
+                background: var(--glass-bg);
                 backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 padding: 12px 16px;
                 justify-content: center;
+                border-bottom: 1px solid var(--glass-border);
             }
 
             .stat-item {
@@ -797,8 +799,9 @@
                 font-size: 20px;
                 font-weight: 700;
                 padding: 10px 24px;
-                background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2));
+                background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(99, 102, 241, 0.15));
                 border-radius: 12px;
+                border: 1px solid rgba(79, 70, 229, 0.2);
             }
 
             /* 游戏区域全屏 */
@@ -816,11 +819,13 @@
                 left: 0;
                 right: 0;
                 z-index: 50;
-                background: rgba(15, 23, 42, 0.95);
+                background: var(--glass-bg);
                 backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
                 padding: 12px 16px;
                 margin-bottom: 0;
                 gap: 12px;
+                border-bottom: 1px solid var(--glass-border);
             }
 
             .game-header .game-title {
@@ -867,16 +872,16 @@
             }
 
             .match-column-title {
-                font-size: 11px;
+                font-size: 13px;
                 margin-bottom: 6px;
                 justify-content: center;
             }
 
             /* 单词卡片占据更多空间 */
             .match-item {
-                padding: 16px 8px;
-                font-size: 18px;
-                min-height: 80px;
+                padding: 18px 10px;
+                font-size: 22px;
+                min-height: 90px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -892,8 +897,10 @@
                 left: 0;
                 right: 0;
                 padding: 12px 16px;
-                background: rgba(15, 23, 42, 0.95);
+                background: var(--glass-bg);
                 backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-top: 1px solid var(--glass-border);
             }
 
             /* 拼写模式优化 */
@@ -909,38 +916,41 @@
             }
 
             .spelling-chinese {
-                font-size: 32px;
-                margin-bottom: 20px;
+                font-size: 36px;
+                margin-bottom: 24px;
                 font-weight: 600;
+                line-height: 1.4;
             }
 
             .spelling-input {
-                font-size: 24px;
+                font-size: 26px;
                 padding: 18px 20px;
                 max-width: 100%;
             }
 
             .letter-hints {
-                gap: 6px;
+                gap: 8px;
             }
 
             .letter-hint {
-                width: 32px;
-                height: 40px;
-                font-size: 16px;
+                width: 36px;
+                height: 46px;
+                font-size: 18px;
             }
 
             .spelling-actions {
                 flex-direction: row;
                 flex-wrap: wrap;
-                gap: 8px;
+                gap: 10px;
                 justify-content: center;
             }
 
             .spelling-actions .btn {
                 flex: 1;
-                min-width: 100px;
+                min-width: 110px;
                 max-width: 180px;
+                padding: 14px 16px;
+                font-size: 15px;
             }
 
             /* 完成界面 */
@@ -1833,7 +1843,7 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: rgba(15, 23, 42, 0.95);
+                background: var(--glass-bg);
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
                 border-top: 1px solid var(--glass-border);
