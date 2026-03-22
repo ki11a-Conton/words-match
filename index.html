@@ -315,14 +315,18 @@
             flex: 1;
             max-width: 300px;
             height: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 4px;
             overflow: hidden;
         }
 
+        [data-theme="dark"] .game-header .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .game-header .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--success) 100%);
+            background: var(--primary);
             border-radius: 4px;
             transition: width var(--transition-slow);
         }
@@ -341,7 +345,8 @@
         }
 
         .match-container.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
 
         .match-grid {
@@ -940,11 +945,17 @@
             .game-header .progress-bar {
                 flex: 1;
                 max-width: none;
+                background: rgba(0, 0, 0, 0.08);
+            }
+
+            [data-theme="dark"] .game-header .progress-bar {
+                background: rgba(255, 255, 255, 0.1);
             }
 
             .game-header .progress-text {
                 font-size: 13px;
                 min-width: 70px;
+                color: var(--text-primary);
             }
 
             .game-header .skip-round-btn {
@@ -962,36 +973,40 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
             }
 
             .match-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                gap: 10px;
                 flex: 1;
                 align-content: center;
+                width: 100%;
             }
 
             .match-column {
-                gap: 8px;
+                gap: 10px;
+                display: flex;
+                flex-direction: column;
             }
 
             .match-column-title {
                 font-size: 13px;
-                margin-bottom: 6px;
+                margin-bottom: 8px;
                 justify-content: center;
             }
 
             /* 单词卡片占据更多空间 */
             .match-item {
-                padding: 18px 10px;
+                padding: 20px 12px;
                 font-size: 22px;
-                min-height: 90px;
+                min-height: 85px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                border-radius: 12px;
+                border-radius: 14px;
                 font-weight: 500;
                 touch-action: manipulation;
                 -webkit-tap-highlight-color: transparent;
@@ -1016,7 +1031,7 @@
             }
 
             /* 拼写模式优化 - 防止键盘弹出挤压 */
-            .spelling-container {
+            .spelling-container.active {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
@@ -1025,10 +1040,6 @@
                 min-height: 100%;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-            }
-
-            .spelling-container.active {
-                display: flex;
             }
 
             .spelling-card {
@@ -1123,14 +1134,6 @@
             .mobile-mode-switch svg {
                 width: 20px;
                 height: 20px;
-            }
-            
-            @media (max-width: 768px) {
-                .mobile-mode-switch {
-                    display: flex;
-                align-items: center;
-                    gap: 8px;
-                }
             }
         }
 
@@ -1775,14 +1778,17 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px solid rgba(79, 70, 229, 0.2);
             border-radius: var(--radius-md);
             font-size: 18px;
             font-weight: 600;
+            color: var(--primary);
         }
 
         .timer-container.warning {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
             color: var(--error);
         }
 
@@ -1794,15 +1800,19 @@
         .timer-progress {
             width: 100%;
             height: 4px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 2px;
             overflow: hidden;
             margin-top: 8px;
         }
 
+        [data-theme="dark"] .timer-progress {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .timer-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--success) 0%, var(--warning) 50%, var(--error) 100%);
+            background: var(--primary);
             border-radius: 2px;
             transition: width 1s linear;
         }
@@ -2103,6 +2113,7 @@
             position: relative;
             pointer-events: auto;
             transform: translateY(0);
+            display: flex;
         }
 
         @media (max-width: 768px) {
@@ -2159,7 +2170,6 @@
             .mobile-tab:active svg {
                 transform: scale(0.9);
             }
-            }
 
             .mobile-tab.active {
                 color: var(--primary-light);
@@ -2195,7 +2205,8 @@
             }
 
             /* 拼写容器优化 - 防止键盘弹出挤压 */
-            .spelling-container {
+            .spelling-container.active {
+                display: flex;
                 min-height: 100%;
                 overflow-y: auto;
                 padding-top: 10vh;
@@ -2211,7 +2222,7 @@
                 display: none !important;
             }
 
-            /* 隐藏错误单词面板按钮 */
+            /* 隐藏错误单词面板按钮 - 移动端用底部导航 */
             .wrong-words-toggle {
                 display: none;
             }
