@@ -1033,6 +1033,58 @@
             .progress-text {
                 font-size: 12px;
             }
+
+            /* 移动端准备界面 */
+            .ready-icon {
+                font-size: 48px;
+            }
+
+            .ready-title {
+                font-size: 24px;
+            }
+
+            .ready-subtitle {
+                font-size: 16px;
+            }
+
+            .btn-large {
+                padding: 14px 36px;
+                font-size: 16px;
+            }
+
+            /* 移动端倒计时 */
+            .countdown-number {
+                font-size: 80px;
+            }
+
+            /* 移动端暂停界面 */
+            .pause-content {
+                padding: 24px;
+            }
+
+            .pause-icon {
+                font-size: 40px;
+            }
+
+            .pause-title {
+                font-size: 22px;
+            }
+
+            .pause-stats {
+                gap: 24px;
+            }
+
+            .pause-stat-value {
+                font-size: 28px;
+            }
+
+            .pause-actions {
+                flex-direction: column;
+            }
+
+            .pause-actions .btn {
+                width: 100%;
+            }
         }
 
         /* Reduced Motion */
@@ -1308,6 +1360,179 @@
 
         .match-item.wrong {
             animation: shakeEnhanced 0.6s ease;
+        }
+
+        /* Ready Screen - 准备开始界面 */
+        .ready-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .ready-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ready-content {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .ready-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+
+        .ready-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .ready-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .btn-large {
+            padding: 16px 48px;
+            font-size: 18px;
+            gap: 12px;
+        }
+
+        .btn-large svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Countdown Screen - 倒计时界面 */
+        .countdown-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .countdown-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .countdown-number {
+            font-size: 120px;
+            font-weight: 800;
+            color: var(--primary-light);
+            text-shadow: 0 0 60px rgba(59, 130, 246, 0.5);
+            animation: countdownPulse 1s ease-in-out;
+        }
+
+        @keyframes countdownPulse {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Pause Screen - 暂停选择界面 */
+        .pause-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .pause-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pause-content {
+            text-align: center;
+            padding: 40px;
+            max-width: 400px;
+        }
+
+        .pause-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .pause-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .pause-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .pause-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 32px;
+        }
+
+        .pause-stat {
+            text-align: center;
+        }
+
+        .pause-stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .pause-stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .pause-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .pause-actions .btn {
+            min-width: 120px;
         }
 
         /* Timer */
@@ -1892,6 +2117,61 @@
                     </svg>
                     再来一轮
                 </button>
+            </div>
+
+            <!-- Ready Screen - 准备开始界面 -->
+            <div class="ready-screen" id="readyScreen">
+                <div class="ready-content">
+                    <div class="ready-icon">📚</div>
+                    <h2 class="ready-title" id="readyTitle">准备开始</h2>
+                    <p class="ready-subtitle" id="readySubtitle">单词匹配模式</p>
+                    <button class="btn btn-primary btn-large" id="startReadyBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        开始
+                    </button>
+                </div>
+            </div>
+
+            <!-- Countdown Screen - 倒计时界面 -->
+            <div class="countdown-screen" id="countdownScreen">
+                <div class="countdown-number" id="countdownNumber">3</div>
+            </div>
+
+            <!-- Pause Screen - 暂停选择界面 -->
+            <div class="pause-screen" id="pauseScreen">
+                <div class="pause-content">
+                    <div class="pause-icon">⏸️</div>
+                    <h2 class="pause-title">已完成 5 轮</h2>
+                    <p class="pause-subtitle">休息一下，或者继续挑战？</p>
+                    <div class="pause-stats">
+                        <div class="pause-stat">
+                            <div class="pause-stat-value" id="pauseScore">0</div>
+                            <div class="pause-stat-label">当前分数</div>
+                        </div>
+                        <div class="pause-stat">
+                            <div class="pause-stat-value" id="pauseAccuracy">0%</div>
+                            <div class="pause-stat-label">正确率</div>
+                        </div>
+                    </div>
+                    <div class="pause-actions">
+                        <button class="btn btn-secondary" id="endGameBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <polyline points="16 17 21 12 16 7"/>
+                                <line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                            结束
+                        </button>
+                        <button class="btn btn-primary" id="continueGameBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            继续
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -5307,6 +5587,8 @@ const wordLists = {
     <script>
         const WORDS_PER_ROUND = 4;
         const ROUND_TIME = 20;
+        const PAUSE_EVERY_ROUNDS = 5; // 每5轮暂停一次
+        
         let isProcessing = false;
         let currentList = 'cet4';
         let currentMode = 'match';
@@ -5320,6 +5602,8 @@ const wordLists = {
         let selectedEnglish = null;
         let selectedChinese = null;
         let score = 0;
+        let gameStarted = false; // 游戏是否已开始
+        let roundsSinceLastPause = 0; // 自上次暂停以来的轮数
 
         // Fisher-Yates Shuffle Algorithm
         function fisherYatesShuffle(array) {
@@ -5342,7 +5626,81 @@ const wordLists = {
 
         function init() {
             setupEventListeners();
-            startGame();
+            showReadyScreen();
+        }
+
+        function showReadyScreen() {
+            // 隐藏游戏容器
+            document.getElementById('matchContainer').classList.remove('active');
+            document.getElementById('spellingContainer').classList.remove('active');
+            document.getElementById('completionScreen').classList.remove('active');
+            document.getElementById('pauseScreen').classList.remove('active');
+            
+            // 显示准备界面
+            const readyScreen = document.getElementById('readyScreen');
+            const readySubtitle = document.getElementById('readySubtitle');
+            readySubtitle.textContent = currentMode === 'match' ? '单词匹配模式' : '单词拼写模式';
+            readyScreen.classList.add('active');
+            
+            gameStarted = false;
+        }
+
+        function startCountdown() {
+            // 隐藏准备界面
+            document.getElementById('readyScreen').classList.remove('active');
+            
+            // 显示倒计时
+            const countdownScreen = document.getElementById('countdownScreen');
+            const countdownNumber = document.getElementById('countdownNumber');
+            countdownScreen.classList.add('active');
+            
+            let count = 3;
+            countdownNumber.textContent = count;
+            
+            const countInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNumber.textContent = count;
+                    // 重新触发动画
+                    countdownNumber.style.animation = 'none';
+                    countdownNumber.offsetHeight; // 触发重绘
+                    countdownNumber.style.animation = 'countdownPulse 1s ease-in-out';
+                } else {
+                    clearInterval(countInterval);
+                    countdownScreen.classList.remove('active');
+                    // 开始游戏
+                    gameStarted = true;
+                    startGame();
+                }
+            }, 1000);
+        }
+
+        function showPauseScreen() {
+            stopTimer();
+            
+            const pauseScreen = document.getElementById('pauseScreen');
+            const pauseTitle = document.querySelector('.pause-title');
+            
+            pauseTitle.textContent = `已完成 ${currentRound} 轮`;
+            document.getElementById('pauseScore').textContent = score;
+            
+            const accuracy = totalAttempts > 0 
+                ? Math.round((correctCount / totalAttempts) * 100) 
+                : 0;
+            document.getElementById('pauseAccuracy').textContent = `${accuracy}%`;
+            
+            pauseScreen.classList.add('active');
+        }
+
+        function continueGame() {
+            document.getElementById('pauseScreen').classList.remove('active');
+            roundsSinceLastPause = 0;
+            startNewRound();
+        }
+
+        function endGame() {
+            document.getElementById('pauseScreen').classList.remove('active');
+            showCompletion();
         }
 
         function setupEventListeners() {
@@ -5359,7 +5717,9 @@ const wordLists = {
             document.getElementById('hintBtn').addEventListener('click', revealHint);
             document.getElementById('checkBtn').addEventListener('click', checkSpelling);
             document.getElementById('skipBtn').addEventListener('click', skipWord);
-            document.getElementById('restartBtn').addEventListener('click', startGame);
+            document.getElementById('restartBtn').addEventListener('click', () => {
+                showReadyScreen();
+            });
 
             document.getElementById('spellingInput').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') checkSpelling();
@@ -5368,6 +5728,13 @@ const wordLists = {
             document.getElementById('themeBtn').addEventListener('click', toggleTheme);
             document.getElementById('focusBtn').addEventListener('click', toggleFocusMode);
             document.getElementById('skipRoundBtn').addEventListener('click', skipCurrentRound);
+            
+            // 准备开始按钮
+            document.getElementById('startReadyBtn').addEventListener('click', startCountdown);
+            
+            // 暂停界面按钮
+            document.getElementById('endGameBtn').addEventListener('click', endGame);
+            document.getElementById('continueGameBtn').addEventListener('click', continueGame);
             
             document.getElementById('wordBankToggle').addEventListener('click', toggleWordBank);
             
@@ -5614,6 +5981,7 @@ const wordLists = {
             score = 0;
             correctCount = 0;
             totalAttempts = 0;
+            roundsSinceLastPause = 0;
 
             document.getElementById('completionScreen').classList.remove('active');
             document.getElementById('matchContainer').classList.toggle('active', currentMode === 'match');
@@ -5631,6 +5999,7 @@ const wordLists = {
             selectedEnglish = null;
             selectedChinese = null;
             currentRound++;
+            roundsSinceLastPause++;
 
             const availableIndices = [];
             for (let i = 0; i < allWords.length; i++) {
@@ -5783,6 +6152,9 @@ const wordLists = {
                         isProcessing = false;
                         if (usedWordIndices.length >= allWords.length) {
                             showCompletion();
+                        } else if (roundsSinceLastPause >= PAUSE_EVERY_ROUNDS) {
+                            // 每5轮暂停一次
+                            showPauseScreen();
                         } else {
                             startNewRound();
                         }
@@ -5821,8 +6193,12 @@ const wordLists = {
 
         function setupSpellingMode() {
             if (spellingIndex >= currentRoundWords.length) {
+                stopTimer();
                 if (usedWordIndices.length >= allWords.length) {
                     showCompletion();
+                } else if (roundsSinceLastPause >= PAUSE_EVERY_ROUNDS) {
+                    // 每5轮暂停一次
+                    showPauseScreen();
                 } else {
                     startNewRound();
                 }
