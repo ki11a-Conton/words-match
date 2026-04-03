@@ -37,6 +37,7 @@ const WordMatch: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showScorePopup, setShowScorePopup] = useState(false);
   const [scorePopupValue, setScorePopupValue] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const allWords: MatchWord[] = vocabularyWords.map(w => ({
     english: w.english,
@@ -58,6 +59,7 @@ const WordMatch: React.FC = () => {
     setTimeLeft(ROUND_TIME);
     setCurrentRound(r => r + 1);
     setIsAnimating(false);
+    setIsProcessing(false);
   }, [allWords]);
 
   const startCountdown = () => {
@@ -75,7 +77,7 @@ const WordMatch: React.FC = () => {
   };
 
   const handleMatch = (word: MatchWord, type: 'english' | 'chinese') => {
-    if (gameState !== 'playing' || isAnimating) return;
+    if (gameState !== 'playing' || isAnimating || isProcessing) return;
 
     if (type === 'english') {
       if (selectedEnglish?.id === word.id) {
@@ -99,6 +101,7 @@ const WordMatch: React.FC = () => {
   };
 
   const checkMatch = (eng: MatchWord, chi: MatchWord) => {
+    setIsProcessing(true);
     setIsAnimating(true);
     setTotalAttempts(t => t + 1);
     
@@ -123,6 +126,7 @@ const WordMatch: React.FC = () => {
           setSelectedChinese(null);
           setWrongPair({ english: null, chinese: null });
           setIsAnimating(false);
+          setIsProcessing(false);
           
           if (matchedPairs + 1 >= WORDS_PER_ROUND) {
             setTimeout(() => {
@@ -144,6 +148,7 @@ const WordMatch: React.FC = () => {
         setSelectedChinese(null);
         setWrongPair({ english: null, chinese: null });
         setIsAnimating(false);
+        setIsProcessing(false);
       }, 600);
     }
   };
