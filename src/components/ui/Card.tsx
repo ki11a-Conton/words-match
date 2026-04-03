@@ -13,9 +13,9 @@ export const Card = ({ children, className, glass = false, hoverable = false, ..
   <div
     className={twMerge(
       clsx(
-        'bg-white rounded-2xl shadow-lg border border-gray-100',
-        glass && 'bg-white/90 backdrop-blur-sm',
-        hoverable && 'transition-all duration-300 hover:shadow-xl hover:-translate-y-1',
+        'bg-white rounded-[var(--radius-xl)] shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_32px_rgba(0,0,0,0.04)]',
+        glass && 'glass-card',
+        hoverable && 'transition-all duration-[var(--duration-fast)] ease-[var(--spring-smooth)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08),0_12px_40px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 active:scale-[0.98]',
         className
       )
     )}
@@ -31,7 +31,7 @@ interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CardHeader = ({ children, className, ...props }: CardHeaderProps) => (
-  <div className={twMerge('p-6 border-b border-gray-100', className)} {...props}>
+  <div className={twMerge('p-5 border-b border-[var(--separator)]', className)} {...props}>
     {children}
   </div>
 );
@@ -42,7 +42,7 @@ interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 }
 
 export const CardTitle = ({ children, className, ...props }: CardTitleProps) => (
-  <h3 className={twMerge('text-xl font-bold text-gray-900', className)} {...props}>
+  <h3 className={twMerge('text-[21px] font-bold text-[var(--text-primary)]', className)} {...props}>
     {children}
   </h3>
 );
@@ -53,7 +53,7 @@ interface CardContentProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CardContent = ({ children, className, ...props }: CardContentProps) => (
-  <div className={twMerge('p-6', className)} {...props}>
+  <div className={twMerge('p-5', className)} {...props}>
     {children}
   </div>
 );
@@ -64,7 +64,7 @@ interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CardFooter = ({ children, className, ...props }: CardFooterProps) => (
-  <div className={twMerge('p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl', className)} {...props}>
+  <div className={twMerge('p-5 border-t border-[var(--separator)] bg-[rgba(120,120,128,0.04)] rounded-b-[var(--radius-xl)]', className)} {...props}>
     {children}
   </div>
 );
