@@ -14,18 +14,23 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [showScore, setShowScore] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startRecording = async () => {
+    setError(null);
+    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
+      
       mediaRecorderRef.current.ondataavailable = (e) => {
         audioChunksRef.current.push(e.data);
       };
+      
       mediaRecorderRef.current.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
         const url = URL.createObjectURL(audioBlob);
@@ -33,14 +38,25 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         setShowScore(true);
         stream.getTracks().forEach(track => track.stop());
       };
+      
       mediaRecorderRef.current.start();
       setIsRecording(true);
       setRecordingTime(0);
+      setAudioUrl(null);
+      setShowScore(false);
+      
       timerRef.current = setInterval(() => {
         setRecordingTime(t => t + 1);
       }, 1000);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error accessing microphone:', err);
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setError('Microphone permission denied. Please allow microphone access in your browser settings and try again.');
+      } else if (err.name === 'NotFoundError') {
+        setError('No microphone found. Please connect a microphone and try again.');
+      } else {
+        setError('Unable to access microphone. Please check your browser settings.');
+      }
     }
   };
 
@@ -63,9 +79,11 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
 
   const speakText = () => {
     if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      speechSynthesis.speak(utterance);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
     }
   };
 
@@ -75,10 +93,17 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleNext = () => {
+    setAudioUrl(null);
+    setShowScore(false);
+    setError(null);
+    onComplete();
+  };
+
   return (
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-center">口语跟读</CardTitle>
+        <CardTitle className="text-center">Speaking Practice</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
@@ -89,9 +114,19 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
             icon={<Volume2 size={20} />}
             onClick={speakText}
           >
-            播放标准发音
+            Play Standard Pronunciation
           </Button>
         </div>
+
+        {error && (
+          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+            <p className="text-yellow-800 text-sm">{error}</p>
+            <p className="text-yellow-700 text-xs mt-2">
+              Tip: Click the microphone icon in your browser address bar to enable microphone access.
+            </p>
+          </div>
+        )}
+
         <div className="flex flex-col items-center gap-4">
           {isRecording ? (
             <div className="flex flex-col items-center gap-4">
@@ -107,7 +142,7 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
                 icon={<Square size={20} />}
                 onClick={stopRecording}
               >
-                停止录音
+                Stop Recording
               </Button>
             </div>
           ) : (
@@ -117,9 +152,10 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
               onClick={startRecording}
               disabled={showScore}
             >
-              开始录音
+              Start Recording
             </Button>
           )}
+
           {audioUrl && (
             <div className="w-full flex flex-col items-center gap-3">
               <audio src={audioUrl} controls className="w-full" />
@@ -128,16 +164,17 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
                 icon={<Play size={20} />}
                 onClick={playAudio}
               >
-                播放录音
+                Play Recording
               </Button>
             </div>
           )}
+
           {showScore && (
             <div className="w-full text-center p-6 bg-green-50 rounded-2xl border border-green-200">
-              <p className="text-3xl font-bold text-green-600 mb-2">85 分</p>
-              <p className="text-gray-600 mb-4">发音很不错！继续加油！</p>
-              <Button onClick={onComplete}>
-                下一句
+              <p className="text-3xl font-bold text-green-600 mb-2">85 Points</p>
+              <p className="text-gray-600 mb-4">Great pronunciation! Keep it up!</p>
+              <Button onClick={handleNext}>
+                Next Sentence
               </Button>
             </div>
           )}
