@@ -7,6 +7,7 @@ import Grammar from "./pages/Grammar";
 import Speaking from "./pages/Speaking";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
+import WordMatch from "./pages/WordMatch";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/learn/vocabulary" element={<Vocabulary />} />
         <Route path="/learn/grammar" element={<Grammar />} />
         <Route path="/learn/speaking" element={<Speaking />} />
+        <Route path="/learn/match" element={<WordMatch />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

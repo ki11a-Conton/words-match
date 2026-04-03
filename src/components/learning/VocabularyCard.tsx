@@ -39,7 +39,7 @@ export const VocabularyCard = ({
               <p className="text-sm opacity-75 mb-6">Tap to flip</p>
               <h3 className="text-5xl font-bold mb-4">{word.english}</h3>
               <p className="text-xl opacity-90">{word.phonetic}</p>
-              <div className="mt-6 px-4 py-1.5 bg-white/20 rounded-full text-sm">
+              <div className="mt-6 px-4 py-1.5 bg-white/20 rounded-full text-sm backdrop-blur-sm">
                 {word.difficulty === 'easy' ? 'Beginner' : word.difficulty === 'medium' ? 'Intermediate' : 'Advanced'}
               </div>
             </div>
@@ -54,7 +54,7 @@ export const VocabularyCard = ({
             transform: 'rotateY(180deg)'
           }}
         >
-          <div className="w-full h-full bg-white rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 border border-gray-100 relative overflow-hidden">
+          <div className="w-full h-full glass-card rounded-3xl flex flex-col items-center justify-center p-8 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
             
             <div className="relative z-10 w-full">

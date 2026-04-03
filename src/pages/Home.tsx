@@ -5,7 +5,7 @@ import { Header } from '../components/layout/Header';
 import { StatsCard } from '../components/stats/StatsCard';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { BookOpen, ScrollText, Mic, TrendingUp, Trophy, Calendar, BookMarked } from 'lucide-react';
+import { BookOpen, ScrollText, Mic, TrendingUp, Trophy, Calendar, BookMarked, Gamepad2 } from 'lucide-react';
 
 const Home: React.FC = () => {
   const { user, isAuthenticated, learningProgress, achievements, wordMastery } = useAppStore();
@@ -35,63 +35,79 @@ const Home: React.FC = () => {
 
   const learningModules = [
     {
+      id: 'match',
+      title: 'Word Match',
+      description: 'Fun matching game to learn words',
+      icon: <Gamepad2 className="w-8 h-8" />,
+      path: '/learn/match',
+      gradient: 'from-pink-500 to-rose-500'
+    },
+    {
       id: 'vocabulary',
-      title: '单词记忆',
-      description: '通过闪卡高效记忆单词',
+      title: 'Flashcards',
+      description: 'Learn words with flip cards',
       icon: <BookOpen className="w-8 h-8" />,
-      path: '/learn/vocabulary'
+      path: '/learn/vocabulary',
+      gradient: 'from-indigo-500 to-purple-500'
     },
     {
       id: 'grammar',
-      title: '语法练习',
-      description: '交互式语法题目训练',
+      title: 'Grammar Quiz',
+      description: 'Interactive grammar exercises',
       icon: <ScrollText className="w-8 h-8" />,
-      path: '/learn/grammar'
+      path: '/learn/grammar',
+      gradient: 'from-emerald-500 to-teal-500'
     },
     {
       id: 'speaking',
-      title: '口语跟读',
-      description: 'AI 发音评分系统',
+      title: 'Speaking',
+      description: 'Practice pronunciation with AI',
       icon: <Mic className="w-8 h-8" />,
-      path: '/learn/speaking'
+      path: '/learn/speaking',
+      gradient: 'from-violet-500 to-fuchsia-500'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      {/* Background decorations */}
+      <div className="bg-blob bg-blob-1" />
+      <div className="bg-blob bg-blob-2" />
+      <div className="bg-blob bg-blob-3" />
+      
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            你好，{user.username}！
+            Hello, {user.username}!
           </h1>
           <p className="text-gray-600">
-            今天是学习的好日子，让我们继续进步吧！
+            Ready to learn something new today?
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatsCard
-            title="连续学习"
-            value={`${user.streakDays} 天`}
+            title="Streak"
+            value={`${user.streakDays} days`}
             icon={<Calendar className="w-6 h-6" />}
             color="amber"
           />
           <StatsCard
-            title="已学习"
+            title="Total Learned"
             value={totalLearned}
             icon={<TrendingUp className="w-6 h-6" />}
             color="indigo"
           />
           <StatsCard
-            title="正确率"
+            title="Accuracy"
             value={`${totalLearned > 0 ? Math.round((totalCorrect / totalLearned) * 100) : 0}%`}
             icon={<Trophy className="w-6 h-6" />}
             color="emerald"
           />
           <StatsCard
-            title="掌握单词"
+            title="Words Mastered"
             value={totalWordsMastered}
             icon={<BookMarked className="w-6 h-6" />}
             color="violet"
@@ -99,13 +115,13 @@ const Home: React.FC = () => {
         </div>
 
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">选择学习模块</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Learning Modules</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {learningModules.map((module) => (
               <Link key={module.id} to={module.path}>
-                <Card hoverable className="h-full">
+                <Card hoverable className="h-full glass-card">
                   <CardContent>
-                    <div className="p-4 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white inline-block mb-4">
+                    <div className={`p-4 rounded-xl bg-gradient-to-br ${module.gradient} text-white inline-block mb-4 shadow-lg`}>
                       {module.icon}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -115,7 +131,7 @@ const Home: React.FC = () => {
                       {module.description}
                     </p>
                     <Button>
-                      开始学习
+                      Start
                     </Button>
                   </CardContent>
                 </Card>
@@ -126,10 +142,10 @@ const Home: React.FC = () => {
 
         {userAchievements.length > 0 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">获得的成就</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Achievements</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {userAchievements.slice(0, 5).map((achievement, index) => (
-                <Card key={achievement.id} className="text-center">
+                <Card key={achievement.id} className="text-center glass-card">
                   <CardContent>
                     <div className="text-4xl mb-2">🏆</div>
                     <p className="text-sm font-medium text-gray-700">
