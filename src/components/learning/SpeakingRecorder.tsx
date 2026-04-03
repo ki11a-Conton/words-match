@@ -39,10 +39,22 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         throw new Error('Media devices API not supported in your browser');
       }
       
+      // Clear any existing error
+      setError(null);
+      
+      // Request microphone access
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setPermissionStatus('granted');
       
-      mediaRecorderRef.current = new MediaRecorder(stream);
+      // Create MediaRecorder with proper MIME type detection
+      let mimeType = 'audio/wav';
+      if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        mimeType = 'audio/mp4';
+      } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+        mimeType = 'audio/ogg';
+      }
+      
+      mediaRecorderRef.current = new MediaRecorder(stream, { mimeType });
       audioChunksRef.current = [];
       
       mediaRecorderRef.current.ondataavailable = (e) => {
@@ -52,15 +64,28 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
       };
       
       mediaRecorderRef.current.onstop = () => {
-        if (audioChunksRef.current.length > 0) {
-          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-          const url = URL.createObjectURL(audioBlob);
-          setAudioUrl(url);
-          setShowScore(true);
-        } else {
-          setError('No audio recorded. Please try again.');
+        try {
+          if (audioChunksRef.current.length > 0) {
+            const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+            const url = URL.createObjectURL(audioBlob);
+            setAudioUrl(url);
+            setShowScore(true);
+          } else {
+            setError('No audio recorded. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error processing audio:', error);
+          setError('Error processing audio. Please try again.');
+        } finally {
+          // Always stop the stream tracks
+          stream.getTracks().forEach(track => {
+            try {
+              track.stop();
+            } catch (error) {
+              console.error('Error stopping track:', error);
+            }
+          });
         }
-        stream.getTracks().forEach(track => track.stop());
       };
       
       mediaRecorderRef.current.onerror = (e) => {
@@ -70,7 +95,14 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         if (timerRef.current) {
           clearInterval(timerRef.current);
         }
-        stream.getTracks().forEach(track => track.stop());
+        // Stop stream tracks
+        stream.getTracks().forEach(track => {
+          try {
+            track.stop();
+          } catch (error) {
+            console.error('Error stopping track:', error);
+          }
+        });
       };
       
       mediaRecorderRef.current.start();
@@ -86,6 +118,13 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
       console.error('Error accessing microphone:', err);
       setPermissionStatus('denied');
       
+      // Clear any pending timers
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      setIsRecording(false);
+      
+      // Detailed error messages
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         setError('Microphone permission denied. Please allow microphone access in your browser settings to use this feature.');
       } else if (err.name === 'NotFoundError') {
@@ -94,6 +133,10 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         setError('Microphone is being used by another application.');
       } else if (err.name === 'AbortError') {
         setError('Recording was aborted. Please try again.');
+      } else if (err.name === 'OverconstrainedError') {
+        setError('Could not access microphone with the requested constraints.');
+      } else if (err.message && err.message.includes('mediaDevices')) {
+        setError('Media devices API not available in your browser.');
       } else {
         setError('Unable to access microphone. Please check your browser settings.');
       }
@@ -102,10 +145,16 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
+      try {
+        mediaRecorderRef.current.stop();
+      } catch (error) {
+        console.error('Error stopping recording:', error);
+        setError('Error stopping recording. Please try again.');
+      } finally {
+        setIsRecording(false);
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
       }
     }
   };
