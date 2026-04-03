@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Mic, Play, Square, Volume2, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
@@ -34,6 +34,11 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
     setError(null);
     
     try {
+      // Check if navigator.mediaDevices is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Media devices API not supported in your browser');
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setPermissionStatus('granted');
       
@@ -41,14 +46,30 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
       audioChunksRef.current = [];
       
       mediaRecorderRef.current.ondataavailable = (e) => {
-        audioChunksRef.current.push(e.data);
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
       };
       
       mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-        const url = URL.createObjectURL(audioBlob);
-        setAudioUrl(url);
-        setShowScore(true);
+        if (audioChunksRef.current.length > 0) {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+          const url = URL.createObjectURL(audioBlob);
+          setAudioUrl(url);
+          setShowScore(true);
+        } else {
+          setError('No audio recorded. Please try again.');
+        }
+        stream.getTracks().forEach(track => track.stop());
+      };
+      
+      mediaRecorderRef.current.onerror = (e) => {
+        console.error('MediaRecorder error:', e);
+        setError('Recording error. Please try again.');
+        setIsRecording(false);
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+        }
         stream.getTracks().forEach(track => track.stop());
       };
       
@@ -71,6 +92,8 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         setError('No microphone found. Please connect a microphone device.');
       } else if (err.name === 'NotReadableError') {
         setError('Microphone is being used by another application.');
+      } else if (err.name === 'AbortError') {
+        setError('Recording was aborted. Please try again.');
       } else {
         setError('Unable to access microphone. Please check your browser settings.');
       }
@@ -117,6 +140,11 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
     onComplete();
   };
 
+  // Check microphone permission on component mount
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
   return (
     <Card className="max-w-2xl mx-auto glass-card">
       <CardHeader>
@@ -142,7 +170,7 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
               <div>
                 <p className="text-amber-800 font-medium mb-2">Microphone Access Required</p>
                 <p className="text-amber-700 text-sm mb-3">{error}</p>
-                <div className="text-xs text-amber-600 bg-amber-100/50 p-3 rounded-xl">
+                <div className="text-xs text-amber-600 bg-amber-100/50 p-3 rounded-xl mb-3">
                   <p className="font-medium mb-1">How to enable microphone:</p>
                   <ol className="list-decimal list-inside space-y-1">
                     <li>Click the microphone icon in your browser address bar</li>
@@ -150,6 +178,16 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
                     <li>Refresh the page and try again</li>
                   </ol>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setError(null);
+                    startRecording();
+                  }}
+                >
+                  Try Again
+                </Button>
               </div>
             </div>
           </div>
