@@ -35,6 +35,8 @@ const WordMatch: React.FC = () => {
   const [wrongPair, setWrongPair] = useState<{ english: MatchWord | null; chinese: MatchWord | null }>({ english: null, chinese: null });
   const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showScorePopup, setShowScorePopup] = useState(false);
+  const [scorePopupValue, setScorePopupValue] = useState(0);
 
   const allWords: MatchWord[] = vocabularyWords.map(w => ({
     english: w.english,
@@ -103,9 +105,15 @@ const WordMatch: React.FC = () => {
     if (eng.id === chi.id) {
       setCorrectCount(c => c + 1);
       const timeBonus = Math.round((timeLeft / ROUND_TIME) * 100);
-      setScore(s => s + timeBonus + 50);
+      const totalPoints = timeBonus + 50;
+      setScore(s => s + totalPoints);
       setMatchedPairs(p => p + 1);
       updateProgress('vocabulary', true);
+      
+      // Show score popup
+      setScorePopupValue(totalPoints);
+      setShowScorePopup(true);
+      setTimeout(() => setShowScorePopup(false), 1000);
       
       setTimeout(() => {
         setMatchedIds(prev => new Set([...prev, eng.id]));
@@ -268,10 +276,13 @@ const WordMatch: React.FC = () => {
         )}
 
         {gameState === 'playing' && (
-          <div className="game-area">
+          <div className="game-area relative">
             {/* Game header */}
             <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
               <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold">{currentRound}</span>
+                </div>
                 <span className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Round {currentRound}</span>
               </div>
               
@@ -287,17 +298,24 @@ const WordMatch: React.FC = () => {
                     style={{ width: `${(matchedPairs / WORDS_PER_ROUND) * 100}%` }}
                   />
                 </div>
-                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{matchedPairs}/{WORDS_PER_ROUND}</span>
+                <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{matchedPairs}/{WORDS_PER_ROUND}</span>
               </div>
             </div>
+
+            {/* Score popup */}
+            {showScorePopup && (
+              <div className="score-popup">
+                +{scorePopupValue}
+              </div>
+            )}
 
             {/* Match grid */}
             <div className="match-grid">
               {/* English Column */}
               <div className="match-column">
                 <div className="match-column-title">
-                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--primary)' }} />
-                  English
+                  <span className="w-3 h-3 rounded-full" style={{ background: 'var(--primary)' }} />
+                  <span className="ml-2 font-semibold">English</span>
                 </div>
                 {englishWords.map((word) => (
                   <button
@@ -306,7 +324,7 @@ const WordMatch: React.FC = () => {
                     className={getItemClass(word, 'english')}
                     disabled={isAnimating || matchedIds.has(word.id)}
                   >
-                    {word.english}
+                    <span className="word-text">{word.english}</span>
                   </button>
                 ))}
               </div>
@@ -314,8 +332,8 @@ const WordMatch: React.FC = () => {
               {/* Chinese Column */}
               <div className="match-column">
                 <div className="match-column-title">
-                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--success)' }} />
-                  中文
+                  <span className="w-3 h-3 rounded-full" style={{ background: 'var(--success)' }} />
+                  <span className="ml-2 font-semibold">中文</span>
                 </div>
                 {chineseWords.map((word) => (
                   <button
@@ -324,7 +342,7 @@ const WordMatch: React.FC = () => {
                     className={getItemClass(word, 'chinese')}
                     disabled={isAnimating || matchedIds.has(word.id)}
                   >
-                    {word.chinese}
+                    <span className="word-text">{word.chinese}</span>
                   </button>
                 ))}
               </div>
