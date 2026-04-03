@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Mic, Play, Square, Volume2 } from 'lucide-react';
+import { Mic, Play, Square, Volume2, AlertCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 
@@ -15,15 +15,28 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [showScore, setShowScore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [permissionStatus, setPermissionStatus] = useState<'unknown' | 'granted' | 'denied'>('unknown');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const checkPermission = async () => {
+    try {
+      const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+      setPermissionStatus(result.state);
+      result.onchange = () => setPermissionStatus(result.state);
+    } catch {
+      // Permissions API not supported
+    }
+  };
 
   const startRecording = async () => {
     setError(null);
     
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setPermissionStatus('granted');
+      
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
       
@@ -50,10 +63,14 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
       }, 1000);
     } catch (err: any) {
       console.error('Error accessing microphone:', err);
+      setPermissionStatus('denied');
+      
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        setError('Microphone permission denied. Please allow microphone access in your browser settings and try again.');
+        setError('Microphone permission denied. Please allow microphone access in your browser settings to use this feature.');
       } else if (err.name === 'NotFoundError') {
-        setError('No microphone found. Please connect a microphone and try again.');
+        setError('No microphone found. Please connect a microphone device.');
+      } else if (err.name === 'NotReadableError') {
+        setError('Microphone is being used by another application.');
       } else {
         setError('Unable to access microphone. Please check your browser settings.');
       }
@@ -101,7 +118,7 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto glass-card">
       <CardHeader>
         <CardTitle className="text-center">Speaking Practice</CardTitle>
       </CardHeader>
@@ -119,18 +136,29 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
         </div>
 
         {error && (
-          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-            <p className="text-yellow-800 text-sm">{error}</p>
-            <p className="text-yellow-700 text-xs mt-2">
-              Tip: Click the microphone icon in your browser address bar to enable microphone access.
-            </p>
+          <div className="p-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-amber-800 font-medium mb-2">Microphone Access Required</p>
+                <p className="text-amber-700 text-sm mb-3">{error}</p>
+                <div className="text-xs text-amber-600 bg-amber-100/50 p-3 rounded-xl">
+                  <p className="font-medium mb-1">How to enable microphone:</p>
+                  <ol className="list-decimal list-inside space-y-1">
+                    <li>Click the microphone icon in your browser address bar</li>
+                    <li>Select "Allow" for microphone access</li>
+                    <li>Refresh the page and try again</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
         <div className="flex flex-col items-center gap-4">
           {isRecording ? (
             <div className="flex flex-col items-center gap-4">
-              <div className="w-24 h-24 rounded-full bg-red-500 flex items-center justify-center animate-pulse">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center animate-pulse shadow-xl">
                 <Square size={48} className="text-white" />
               </div>
               <p className="text-2xl font-mono font-bold text-red-600">
@@ -170,7 +198,7 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
           )}
 
           {showScore && (
-            <div className="w-full text-center p-6 bg-green-50 rounded-2xl border border-green-200">
+            <div className="w-full text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200">
               <p className="text-3xl font-bold text-green-600 mb-2">85 Points</p>
               <p className="text-gray-600 mb-4">Great pronunciation! Keep it up!</p>
               <Button onClick={handleNext}>
