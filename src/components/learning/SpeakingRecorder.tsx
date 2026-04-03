@@ -260,6 +260,21 @@ export const SpeakingRecorder = ({ text, translation, onComplete }: SpeakingReco
                 Stop Recording
               </Button>
             </div>
+          ) : permissionStatus === 'denied' ? (
+            <div className="text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl w-full">
+              <p className="text-amber-800 font-medium mb-3">Microphone Permission Denied</p>
+              <p className="text-amber-700 text-sm mb-4">You have denied microphone access. Please enable it in your browser settings to use this feature.</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setError(null);
+                  startRecording();
+                }}
+              >
+                Try Again
+              </Button>
+            </div>
           ) : (
             <Button
               size="lg"
