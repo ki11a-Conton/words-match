@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { Word } from '../../types';
 
 interface VocabularyCardProps {
@@ -19,10 +18,12 @@ export const VocabularyCard = ({
   return (
     <div style={{ perspective: '1000px' }}>
       <div
-        className={`relative w-full h-96 cursor-pointer transition-transform duration-600 ${
-          isFlipped ? 'rotate-y-180' : ''
-        }`}
-        style={{ transformStyle: 'preserve-3d' }}
+        className="relative w-full h-96 cursor-pointer"
+        style={{
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s',
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
+        }}
         onClick={onFlip}
       >
         <div 
@@ -39,7 +40,7 @@ export const VocabularyCard = ({
           className="absolute inset-0 w-full h-full"
           style={{ 
             backfaceVisibility: 'hidden', 
-            transform: 'rotateY(180deg)' 
+            transform: 'rotateY(180deg)'
           }}
         >
           <div className="w-full h-full bg-white rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 border-2 border-indigo-100">
