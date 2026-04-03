@@ -14,6 +14,7 @@ interface MatchWord {
 
 const WORDS_PER_ROUND = 4;
 const ROUND_TIME = 20;
+const TOTAL_ROUNDS = 3;
 
 const WordMatch: React.FC = () => {
   const { user, isAuthenticated, vocabularyWords, updateProgress } = useAppStore();
@@ -130,7 +131,7 @@ const WordMatch: React.FC = () => {
           
           if (matchedPairs + 1 >= WORDS_PER_ROUND) {
             setTimeout(() => {
-              if (currentRound >= 5) {
+              if (currentRound >= TOTAL_ROUNDS) {
                 setGameState('complete');
               } else {
                 startNewRound();
@@ -173,7 +174,7 @@ const WordMatch: React.FC = () => {
       const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
       return () => clearInterval(timer);
     } else if (gameState === 'playing' && timeLeft === 0) {
-      if (currentRound >= 5) {
+      if (currentRound >= TOTAL_ROUNDS) {
         setGameState('complete');
       } else {
         startNewRound();
