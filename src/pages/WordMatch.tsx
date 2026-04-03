@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { Header } from '../components/layout/Header';
 import { Button } from '../components/ui/Button';
-import { ArrowLeft, Trophy, Clock, Target, RefreshCw, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Trophy, Clock, RefreshCw, Play, Pause } from 'lucide-react';
 import { shuffleArray } from '../utils/helpers';
 
 interface MatchWord {
@@ -32,8 +32,9 @@ const WordMatch: React.FC = () => {
   const [selectedEnglish, setSelectedEnglish] = useState<MatchWord | null>(null);
   const [selectedChinese, setSelectedChinese] = useState<MatchWord | null>(null);
   const [matchedPairs, setMatchedPairs] = useState(0);
-  const [wrongWords, setWrongWords] = useState<MatchWord[]>([]);
   const [wrongPair, setWrongPair] = useState<{ english: MatchWord | null; chinese: MatchWord | null }>({ english: null, chinese: null });
+  const [matchedIds, setMatchedIds] = useState<Set<string>>(new Set());
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const allWords: MatchWord[] = vocabularyWords.map(w => ({
     english: w.english,
@@ -51,8 +52,10 @@ const WordMatch: React.FC = () => {
     setSelectedEnglish(null);
     setSelectedChinese(null);
     setWrongPair({ english: null, chinese: null });
+    setMatchedIds(new Set());
     setTimeLeft(ROUND_TIME);
     setCurrentRound(r => r + 1);
+    setIsAnimating(false);
   }, [allWords]);
 
   const startCountdown = () => {
@@ -66,19 +69,26 @@ const WordMatch: React.FC = () => {
     setCorrectCount(0);
     setTotalAttempts(0);
     setCurrentRound(0);
-    setWrongWords([]);
     startNewRound();
   };
 
   const handleMatch = (word: MatchWord, type: 'english' | 'chinese') => {
-    if (gameState !== 'playing') return;
+    if (gameState !== 'playing' || isAnimating) return;
 
     if (type === 'english') {
+      if (selectedEnglish?.id === word.id) {
+        setSelectedEnglish(null);
+        return;
+      }
       setSelectedEnglish(word);
       if (selectedChinese) {
         checkMatch(word, selectedChinese);
       }
     } else {
+      if (selectedChinese?.id === word.id) {
+        setSelectedChinese(null);
+        return;
+      }
       setSelectedChinese(word);
       if (selectedEnglish) {
         checkMatch(selectedEnglish, word);
@@ -87,34 +97,37 @@ const WordMatch: React.FC = () => {
   };
 
   const checkMatch = (eng: MatchWord, chi: MatchWord) => {
+    setIsAnimating(true);
     setTotalAttempts(t => t + 1);
     
-    if (eng.english === chi.english) {
+    if (eng.id === chi.id) {
       setCorrectCount(c => c + 1);
-      setScore(s => s + Math.round((timeLeft / ROUND_TIME) * 100) + 50);
+      const timeBonus = Math.round((timeLeft / ROUND_TIME) * 100);
+      setScore(s => s + timeBonus + 50);
       setMatchedPairs(p => p + 1);
       updateProgress('vocabulary', true);
       
       setTimeout(() => {
-        setEnglishWords(prev => prev.filter(w => w.id !== eng.id));
-        setChineseWords(prev => prev.filter(w => w.id !== eng.id));
-      }, 400);
-      
-      setSelectedEnglish(null);
-      setSelectedChinese(null);
-      setWrongPair({ english: null, chinese: null });
-      
-      if (matchedPairs + 1 >= WORDS_PER_ROUND) {
+        setMatchedIds(prev => new Set([...prev, eng.id]));
+        
         setTimeout(() => {
-          if (currentRound >= 5) {
-            setGameState('paused');
-          } else {
-            startNewRound();
+          setSelectedEnglish(null);
+          setSelectedChinese(null);
+          setWrongPair({ english: null, chinese: null });
+          setIsAnimating(false);
+          
+          if (matchedPairs + 1 >= WORDS_PER_ROUND) {
+            setTimeout(() => {
+              if (currentRound >= 5) {
+                setGameState('complete');
+              } else {
+                startNewRound();
+              }
+            }, 500);
           }
-        }, 600);
-      }
+        }, 400);
+      }, 300);
     } else {
-      setWrongWords(prev => [...prev, eng]);
       updateProgress('vocabulary', false);
       setWrongPair({ english: eng, chinese: chi });
       
@@ -122,7 +135,8 @@ const WordMatch: React.FC = () => {
         setSelectedEnglish(null);
         setSelectedChinese(null);
         setWrongPair({ english: null, chinese: null });
-      }, 500);
+        setIsAnimating(false);
+      }, 600);
     }
   };
 
@@ -146,14 +160,13 @@ const WordMatch: React.FC = () => {
       const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
       return () => clearInterval(timer);
     } else if (gameState === 'playing' && timeLeft === 0) {
-      setWrongWords(prev => [...prev, ...roundWords]);
       if (currentRound >= 5) {
-        setGameState('paused');
+        setGameState('complete');
       } else {
         startNewRound();
       }
     }
-  }, [gameState, timeLeft, currentRound, roundWords]);
+  }, [gameState, timeLeft, currentRound, startNewRound]);
 
   if (!isAuthenticated || !user) {
     return null;
@@ -172,9 +185,14 @@ const WordMatch: React.FC = () => {
       ? wrongPair.english?.id === word.id
       : wrongPair.chinese?.id === word.id;
     
-    if (isSelected && !isWrong) {
+    const isMatched = matchedIds.has(word.id);
+    
+    if (isMatched) {
+      className += ' matched';
+    } else if (isSelected && !isWrong) {
       className += ' selected';
     }
+    
     if (isWrong) {
       className += ' wrong';
     }
@@ -200,7 +218,6 @@ const WordMatch: React.FC = () => {
             variant="ghost"
             icon={<ArrowLeft size={20} />}
             onClick={() => navigate('/')}
-            className="glass"
           >
             Back
           </Button>
@@ -210,29 +227,29 @@ const WordMatch: React.FC = () => {
               <div className="stat-icon score">🏆</div>
               <div>
                 <div className="stat-value">{score}</div>
-                <div className="stat-label text-xs text-gray-500">Score</div>
+                <div className="stat-label text-xs" style={{ color: 'var(--text-secondary)' }}>Score</div>
               </div>
             </div>
             <div className="stat-item">
               <div className="stat-icon progress">📊</div>
               <div>
                 <div className="stat-value">{accuracy}%</div>
-                <div className="stat-label text-xs text-gray-500">Accuracy</div>
+                <div className="stat-label text-xs" style={{ color: 'var(--text-secondary)' }}>Accuracy</div>
               </div>
             </div>
           </div>
         </div>
 
         {gameState === 'ready' && (
-          <div className="game-area text-center py-16">
+          <div className="game-area text-center py-16 scale-in">
             <div className="completion-icon mx-auto mb-6" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%)' }}>
               <Play size={40} className="text-white" />
             </div>
             <h2 className="completion-title mb-4">Word Match</h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Match English words with their Chinese meanings. Be quick and accurate to get higher scores!
+            <p className="mb-8 max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
+              Match English words with their Chinese meanings. Tap to select, then find its match!
             </p>
-            <Button size="lg" onClick={startCountdown} className="btn-primary">
+            <Button size="lg" onClick={startCountdown}>
               Start Game
             </Button>
           </div>
@@ -255,7 +272,7 @@ const WordMatch: React.FC = () => {
             {/* Game header */}
             <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
               <div className="flex items-center gap-3">
-                <span className="text-lg font-semibold">Round {currentRound}</span>
+                <span className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Round {currentRound}</span>
               </div>
               
               <div className={`timer-container flex items-center gap-2 ${timeLeft <= 5 ? 'urgent' : ''}`}>
@@ -270,7 +287,7 @@ const WordMatch: React.FC = () => {
                     style={{ width: `${(matchedPairs / WORDS_PER_ROUND) * 100}%` }}
                   />
                 </div>
-                <span className="text-sm text-gray-600">{matchedPairs}/{WORDS_PER_ROUND}</span>
+                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{matchedPairs}/{WORDS_PER_ROUND}</span>
               </div>
             </div>
 
@@ -279,7 +296,7 @@ const WordMatch: React.FC = () => {
               {/* English Column */}
               <div className="match-column">
                 <div className="match-column-title">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--primary)' }} />
                   English
                 </div>
                 {englishWords.map((word) => (
@@ -287,6 +304,7 @@ const WordMatch: React.FC = () => {
                     key={`eng-${word.id}`}
                     onClick={() => handleMatch(word, 'english')}
                     className={getItemClass(word, 'english')}
+                    disabled={isAnimating || matchedIds.has(word.id)}
                   >
                     {word.english}
                   </button>
@@ -296,14 +314,15 @@ const WordMatch: React.FC = () => {
               {/* Chinese Column */}
               <div className="match-column">
                 <div className="match-column-title">
-                  <span className="w-2 h-2 rounded-full bg-purple-500" />
-                  Chinese
+                  <span className="w-2 h-2 rounded-full" style={{ background: 'var(--success)' }} />
+                  中文
                 </div>
                 {chineseWords.map((word) => (
                   <button
                     key={`chi-${word.id}`}
                     onClick={() => handleMatch(word, 'chinese')}
                     className={getItemClass(word, 'chinese')}
+                    disabled={isAnimating || matchedIds.has(word.id)}
                   >
                     {word.chinese}
                   </button>
@@ -313,22 +332,25 @@ const WordMatch: React.FC = () => {
           </div>
         )}
 
-        {gameState === 'paused' && (
-          <div className="game-area text-center py-16">
+        {gameState === 'complete' && (
+          <div className="game-area text-center py-16 scale-in">
             <div className="completion-icon mx-auto mb-6">
-              <Pause size={40} className="text-white" />
+              <Trophy size={40} className="text-white" />
             </div>
-            <h2 className="completion-title mb-2">Great Progress!</h2>
-            <p className="text-gray-600 mb-8">Completed {currentRound} rounds</p>
+            <h2 className="completion-title mb-4">Excellent Work!</h2>
             
             <div className="flex justify-center gap-8 mb-8">
               <div className="text-center">
-                <div className="text-4xl font-bold text-indigo-600">{score}</div>
-                <div className="text-sm text-gray-500">Total Score</div>
+                <div className="text-3xl font-bold" style={{ color: 'var(--primary)' }}>{score}</div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Score</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-green-600">{accuracy}%</div>
-                <div className="text-sm text-gray-500">Accuracy</div>
+                <div className="text-3xl font-bold" style={{ color: 'var(--success)' }}>{accuracy}%</div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Accuracy</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold" style={{ color: 'var(--primary-light)' }}>{currentRound}</div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Rounds</div>
               </div>
             </div>
 
@@ -337,45 +359,13 @@ const WordMatch: React.FC = () => {
                 variant="outline"
                 icon={<RefreshCw size={20} />}
                 onClick={() => navigate('/')}
-                className="btn-secondary"
               >
-                End Game
+                Back Home
               </Button>
-              <Button onClick={() => {
-                setGameState('playing');
-                startNewRound();
-              }} className="btn-primary">
-                Continue
+              <Button onClick={() => setGameState('ready')}>
+                Play Again
               </Button>
             </div>
-          </div>
-        )}
-
-        {gameState === 'complete' && (
-          <div className="game-area text-center py-16">
-            <div className="completion-icon mx-auto mb-6">
-              <Trophy size={40} className="text-white" />
-            </div>
-            <h2 className="completion-title mb-4">Game Complete!</h2>
-            
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-600">{score}</div>
-                <div className="text-sm text-gray-500">Score</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">{accuracy}%</div>
-                <div className="text-sm text-gray-500">Accuracy</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">{currentRound}</div>
-                <div className="text-sm text-gray-500">Rounds</div>
-              </div>
-            </div>
-
-            <Button onClick={() => setGameState('ready')} className="btn-primary">
-              Play Again
-            </Button>
           </div>
         )}
       </main>
