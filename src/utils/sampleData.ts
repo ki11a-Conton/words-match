@@ -1,46 +1,26 @@
 import type { Word, GrammarQuestion, SpeakingExercise, Badge } from '../types';
 
 export const sampleVocabulary: Word[] = [
-  {
-    id: '1',
-    english: 'Serendipity',
-    chinese: '意外发现珍奇事物的本领',
-    phonetic: '/ˌserənˈdɪpɪti/',
-    example: 'Finding that old photo was pure serendipity.',
-    difficulty: 'hard'
-  },
-  {
-    id: '2',
-    english: 'Ephemeral',
-    chinese: '短暂的、转瞬即逝的',
-    phonetic: '/ɪˈfem(ə)rəl/',
-    example: 'The beauty of cherry blossoms is ephemeral.',
-    difficulty: 'medium'
-  },
-  {
-    id: '3',
-    english: 'Resilience',
-    chinese: '韧性、适应力',
-    phonetic: '/rɪˈzɪliəns/',
-    example: 'Her resilience helped her overcome many challenges.',
-    difficulty: 'hard'
-  },
-  {
-    id: '4',
-    english: 'Tranquil',
-    chinese: '宁静的、平静的',
-    phonetic: '/ˈtræŋkwɪl/',
-    example: 'The lake was so tranquil in the morning.',
-    difficulty: 'medium'
-  },
-  {
-    id: '5',
-    english: 'Curious',
-    chinese: '好奇的',
-    phonetic: '/ˈkjʊəriəs/',
-    example: 'Children are naturally curious about the world.',
-    difficulty: 'easy'
-  }
+  { id: '1', english: 'abandon', chinese: '丢弃;放弃，抛弃', phonetic: '/əˈbændən/', example: 'He had to abandon his car in the snow.', difficulty: 'medium' },
+  { id: '2', english: 'aboard', chinese: '在船(车)上;上船', phonetic: '/əˈbɔːd/', example: 'Welcome aboard the flight to Paris.', difficulty: 'easy' },
+  { id: '3', english: 'absolute', chinese: '绝对的;纯粹的', phonetic: '/ˈæbsəluːt/', example: 'I have absolute trust in you.', difficulty: 'medium' },
+  { id: '4', english: 'absolutely', chinese: '完全地;绝对地', phonetic: '/ˈæbsəluːtli/', example: 'You are absolutely right.', difficulty: 'easy' },
+  { id: '5', english: 'absorb', chinese: '吸收;使专心', phonetic: '/əbˈsɔːb/', example: 'Plants absorb sunlight.', difficulty: 'medium' },
+  { id: '6', english: 'abstract', chinese: '摘要', phonetic: '/ˈæbstrækt/', example: 'Please read the abstract first.', difficulty: 'hard' },
+  { id: '7', english: 'abundant', chinese: '丰富的;大量的', phonetic: '/əˈbʌndənt/', example: 'We have abundant resources.', difficulty: 'medium' },
+  { id: '8', english: 'academic', chinese: '学院的;学术的', phonetic: '/ækəˈdemɪk/', example: 'The academic year starts in September.', difficulty: 'medium' },
+  { id: '9', english: 'accelerate', chinese: '(使)加快;促进', phonetic: '/əkˈseləreɪt/', example: 'We need to accelerate our efforts.', difficulty: 'hard' },
+  { id: '10', english: 'access', chinese: '接近;通道，入口', phonetic: '/ˈækses/', example: 'You need a password to access the system.', difficulty: 'easy' },
+  { id: '11', english: 'accommodate', chinese: '容纳;供应，供给', phonetic: '/əˈkɒmədeɪt/', example: 'This room can accommodate 20 people.', difficulty: 'hard' },
+  { id: '12', english: 'accompany', chinese: '陪伴，陪同;伴随', phonetic: '/əˈkʌmpəni/', example: 'Will you accompany me to the party?', difficulty: 'medium' },
+  { id: '13', english: 'accomplish', chinese: '达到(目的);完成', phonetic: '/əˈkʌmplɪʃ/', example: 'She accomplished her goal.', difficulty: 'medium' },
+  { id: '14', english: 'accurate', chinese: '准确的，正确无误的', phonetic: '/ˈækjərət/', example: 'Please be accurate in your work.', difficulty: 'medium' },
+  { id: '15', english: 'achieve', chinese: '完成;达到', phonetic: '/əˈtʃiːv/', example: 'You can achieve anything with hard work.', difficulty: 'easy' },
+  { id: '16', english: 'acknowledge', chinese: '承认;致谢', phonetic: '/əkˈnɒlɪdʒ/', example: 'He acknowledged his mistake.', difficulty: 'hard' },
+  { id: '17', english: 'acquire', chinese: '取得;获得;学到', phonetic: '/əˈkwaɪə/', example: 'She acquired new skills.', difficulty: 'medium' },
+  { id: '18', english: 'adapt', chinese: '使适应;改编', phonetic: '/əˈdæpt/', example: 'Animals adapt to their environment.', difficulty: 'medium' },
+  { id: '19', english: 'adequate', chinese: '足够的;可以胜任的', phonetic: '/ˈædɪkwət/', example: 'We have adequate supplies.', difficulty: 'hard' },
+  { id: '20', english: 'adjust', chinese: '调整，调节;校正', phonetic: '/əˈdʒʌst/', example: 'Please adjust your seat.', difficulty: 'easy' }
 ];
 
 export const sampleGrammar: GrammarQuestion[] = [
