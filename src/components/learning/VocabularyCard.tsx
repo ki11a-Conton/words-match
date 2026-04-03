@@ -31,7 +31,7 @@ export const VocabularyCard = ({
           style={{ backfaceVisibility: 'hidden' }}
         >
           <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-8 text-white">
-            <p className="text-sm opacity-75 mb-4">点击卡片查看释义</p>
+            <p className="text-sm opacity-75 mb-4">Click to see meaning</p>
             <h3 className="text-4xl font-bold text-center mb-4">{word.english}</h3>
             <p className="text-lg opacity-90">{word.phonetic}</p>
           </div>
@@ -56,7 +56,7 @@ export const VocabularyCard = ({
                 }}
                 className="flex-1 py-3 px-4 bg-red-100 text-red-600 rounded-xl font-semibold hover:bg-red-200 transition-colors"
               >
-                不认识
+                Unknown
               </button>
               <button
                 onClick={(e) => {
@@ -65,7 +65,7 @@ export const VocabularyCard = ({
                 }}
                 className="flex-1 py-3 px-4 bg-green-100 text-green-600 rounded-xl font-semibold hover:bg-green-200 transition-colors"
               >
-                认识
+                Known
               </button>
             </div>
           </div>
