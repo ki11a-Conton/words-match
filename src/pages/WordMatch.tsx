@@ -9,6 +9,7 @@ import { shuffleArray } from '../utils/helpers';
 interface MatchWord {
   english: string;
   chinese: string;
+  id: string;
 }
 
 const WORDS_PER_ROUND = 4;
@@ -32,10 +33,12 @@ const WordMatch: React.FC = () => {
   const [selectedChinese, setSelectedChinese] = useState<MatchWord | null>(null);
   const [matchedPairs, setMatchedPairs] = useState(0);
   const [wrongWords, setWrongWords] = useState<MatchWord[]>([]);
+  const [wrongPair, setWrongPair] = useState<{ english: MatchWord | null; chinese: MatchWord | null }>({ english: null, chinese: null });
 
   const allWords: MatchWord[] = vocabularyWords.map(w => ({
     english: w.english,
-    chinese: w.chinese
+    chinese: w.chinese,
+    id: w.id
   }));
 
   const startNewRound = useCallback(() => {
@@ -47,6 +50,7 @@ const WordMatch: React.FC = () => {
     setMatchedPairs(0);
     setSelectedEnglish(null);
     setSelectedChinese(null);
+    setWrongPair({ english: null, chinese: null });
     setTimeLeft(ROUND_TIME);
     setCurrentRound(r => r + 1);
   }, [allWords]);
@@ -91,8 +95,14 @@ const WordMatch: React.FC = () => {
       setMatchedPairs(p => p + 1);
       updateProgress('vocabulary', true);
       
-      setEnglishWords(prev => prev.filter(w => w.english !== eng.english));
-      setChineseWords(prev => prev.filter(w => w.english !== eng.english));
+      setTimeout(() => {
+        setEnglishWords(prev => prev.filter(w => w.id !== eng.id));
+        setChineseWords(prev => prev.filter(w => w.id !== eng.id));
+      }, 400);
+      
+      setSelectedEnglish(null);
+      setSelectedChinese(null);
+      setWrongPair({ english: null, chinese: null });
       
       if (matchedPairs + 1 >= WORDS_PER_ROUND) {
         setTimeout(() => {
@@ -101,15 +111,19 @@ const WordMatch: React.FC = () => {
           } else {
             startNewRound();
           }
-        }, 500);
+        }, 600);
       }
     } else {
       setWrongWords(prev => [...prev, eng]);
       updateProgress('vocabulary', false);
+      setWrongPair({ english: eng, chinese: chi });
+      
+      setTimeout(() => {
+        setSelectedEnglish(null);
+        setSelectedChinese(null);
+        setWrongPair({ english: null, chinese: null });
+      }, 500);
     }
-    
-    setSelectedEnglish(null);
-    setSelectedChinese(null);
   };
 
   useEffect(() => {
@@ -147,133 +161,174 @@ const WordMatch: React.FC = () => {
 
   const accuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
 
+  const getItemClass = (word: MatchWord, type: 'english' | 'chinese') => {
+    let className = 'match-item';
+    
+    const isSelected = type === 'english' 
+      ? selectedEnglish?.id === word.id 
+      : selectedChinese?.id === word.id;
+    
+    const isWrong = type === 'english'
+      ? wrongPair.english?.id === word.id
+      : wrongPair.chinese?.id === word.id;
+    
+    if (isSelected && !isWrong) {
+      className += ' selected';
+    }
+    if (isWrong) {
+      className += ' wrong';
+    }
+    
+    return className;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%)' }}>
       {/* Background decorations */}
-      <div className="bg-blob bg-blob-1" />
-      <div className="bg-blob bg-blob-2" />
-      <div className="bg-blob bg-blob-3" />
+      <div className="bg-decoration">
+        <div className="bg-blob bg-blob-1" />
+        <div className="bg-blob bg-blob-2" />
+        <div className="bg-blob bg-blob-3" />
+      </div>
       
       <Header />
       
       <main className="relative z-10 max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
+        {/* Stats bar */}
+        <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
           <Button
             variant="ghost"
             icon={<ArrowLeft size={20} />}
             onClick={() => navigate('/')}
+            className="glass"
           >
             Back
           </Button>
-          <h1 className="text-2xl font-bold text-gray-900">Word Match</h1>
-          <div className="flex gap-4">
-            <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-2">
-              <Trophy size={18} className="text-yellow-500" />
-              <span className="font-bold">{score}</span>
+          
+          <div className="stats-bar flex gap-3">
+            <div className="stat-item">
+              <div className="stat-icon score">🏆</div>
+              <div>
+                <div className="stat-value">{score}</div>
+                <div className="stat-label text-xs text-gray-500">Score</div>
+              </div>
             </div>
-            <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-2">
-              <Target size={18} className="text-green-500" />
-              <span className="font-bold">{accuracy}%</span>
+            <div className="stat-item">
+              <div className="stat-icon progress">📊</div>
+              <div>
+                <div className="stat-value">{accuracy}%</div>
+                <div className="stat-label text-xs text-gray-500">Accuracy</div>
+              </div>
             </div>
           </div>
         </div>
 
         {gameState === 'ready' && (
-          <div className="glass-card rounded-3xl p-12 text-center max-w-lg mx-auto">
-            <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+          <div className="game-area text-center py-16">
+            <div className="completion-icon mx-auto mb-6" style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%)' }}>
               <Play size={40} className="text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Word Match</h2>
-            <p className="text-gray-600 mb-8">Match English words with their Chinese meanings. Be quick and accurate!</p>
-            <Button size="lg" onClick={startCountdown}>
+            <h2 className="completion-title mb-4">Word Match</h2>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              Match English words with their Chinese meanings. Be quick and accurate to get higher scores!
+            </p>
+            <Button size="lg" onClick={startCountdown} className="btn-primary">
               Start Game
             </Button>
           </div>
         )}
 
         {gameState === 'countdown' && (
-          <div className="flex items-center justify-center h-96">
-            <div className="text-9xl font-bold text-indigo-600 countdown-number">
+          <div className="game-area flex items-center justify-center min-h-[400px]">
+            <div className="text-9xl font-bold countdown-number" style={{ 
+              background: 'linear-gradient(135deg, var(--primary-light) 0%, var(--success) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
               {countdown}
             </div>
           </div>
         )}
 
         {gameState === 'playing' && (
-          <>
-            <div className="flex items-center justify-center gap-8 mb-8">
-              <div className="glass-card px-6 py-3 rounded-xl flex items-center gap-3">
-                <Clock size={20} className={timeLeft <= 5 ? 'text-red-500' : 'text-indigo-500'} />
-                <span className={`text-2xl font-mono font-bold ${timeLeft <= 5 ? 'text-red-500' : 'text-gray-900'}`}>
-                  {timeLeft}s
-                </span>
+          <div className="game-area">
+            {/* Game header */}
+            <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <span className="text-lg font-semibold">Round {currentRound}</span>
               </div>
-              <div className="glass-card px-6 py-3 rounded-xl">
-                <span className="text-gray-600">Round </span>
-                <span className="font-bold text-gray-900">{currentRound}</span>
+              
+              <div className={`timer-container flex items-center gap-2 ${timeLeft <= 5 ? 'urgent' : ''}`}>
+                <Clock size={20} />
+                <span className="font-mono">{timeLeft}s</span>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill"
+                    style={{ width: `${(matchedPairs / WORDS_PER_ROUND) * 100}%` }}
+                  />
+                </div>
+                <span className="text-sm text-gray-600">{matchedPairs}/{WORDS_PER_ROUND}</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Match grid */}
+            <div className="match-grid">
               {/* English Column */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <div className="match-column">
+                <div className="match-column-title">
                   <span className="w-2 h-2 rounded-full bg-indigo-500" />
                   English
-                </h3>
-                <div className="space-y-4">
-                  {englishWords.map((word, index) => (
-                    <button
-                      key={`eng-${index}`}
-                      onClick={() => handleMatch(word, 'english')}
-                      className={`match-item w-full glass-card rounded-2xl p-5 text-left text-lg font-medium
-                        ${selectedEnglish?.english === word.english ? 'selected' : ''}`}
-                    >
-                      {word.english}
-                    </button>
-                  ))}
                 </div>
+                {englishWords.map((word) => (
+                  <button
+                    key={`eng-${word.id}`}
+                    onClick={() => handleMatch(word, 'english')}
+                    className={getItemClass(word, 'english')}
+                  >
+                    {word.english}
+                  </button>
+                ))}
               </div>
 
               {/* Chinese Column */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <div className="match-column">
+                <div className="match-column-title">
                   <span className="w-2 h-2 rounded-full bg-purple-500" />
                   Chinese
-                </h3>
-                <div className="space-y-4">
-                  {chineseWords.map((word, index) => (
-                    <button
-                      key={`chi-${index}`}
-                      onClick={() => handleMatch(word, 'chinese')}
-                      className={`match-item w-full glass-card rounded-2xl p-5 text-left text-lg
-                        ${selectedChinese?.english === word.english ? 'selected' : ''}`}
-                    >
-                      {word.chinese}
-                    </button>
-                  ))}
                 </div>
+                {chineseWords.map((word) => (
+                  <button
+                    key={`chi-${word.id}`}
+                    onClick={() => handleMatch(word, 'chinese')}
+                    className={getItemClass(word, 'chinese')}
+                  >
+                    {word.chinese}
+                  </button>
+                ))}
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {gameState === 'paused' && (
-          <div className="glass-card rounded-3xl p-12 text-center max-w-lg mx-auto">
-            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+          <div className="game-area text-center py-16">
+            <div className="completion-icon mx-auto mb-6">
               <Pause size={40} className="text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Great Progress!</h2>
-            <p className="text-gray-600 mb-6">Completed {currentRound} rounds</p>
+            <h2 className="completion-title mb-2">Great Progress!</h2>
+            <p className="text-gray-600 mb-8">Completed {currentRound} rounds</p>
             
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-4">
-                <p className="text-3xl font-bold text-indigo-600">{score}</p>
-                <p className="text-sm text-indigo-700">Total Score</p>
+            <div className="flex justify-center gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-indigo-600">{score}</div>
+                <div className="text-sm text-gray-500">Total Score</div>
               </div>
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4">
-                <p className="text-3xl font-bold text-green-600">{accuracy}%</p>
-                <p className="text-sm text-green-700">Accuracy</p>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-green-600">{accuracy}%</div>
+                <div className="text-sm text-gray-500">Accuracy</div>
               </div>
             </div>
 
@@ -282,13 +337,14 @@ const WordMatch: React.FC = () => {
                 variant="outline"
                 icon={<RefreshCw size={20} />}
                 onClick={() => navigate('/')}
+                className="btn-secondary"
               >
                 End Game
               </Button>
               <Button onClick={() => {
                 setGameState('playing');
                 startNewRound();
-              }}>
+              }} className="btn-primary">
                 Continue
               </Button>
             </div>
@@ -296,28 +352,28 @@ const WordMatch: React.FC = () => {
         )}
 
         {gameState === 'complete' && (
-          <div className="glass-card rounded-3xl p-12 text-center max-w-lg mx-auto">
-            <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+          <div className="game-area text-center py-16">
+            <div className="completion-icon mx-auto mb-6">
               <Trophy size={40} className="text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Game Complete!</h2>
+            <h2 className="completion-title mb-4">Game Complete!</h2>
             
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-4">
-                <p className="text-2xl font-bold text-indigo-600">{score}</p>
-                <p className="text-xs text-indigo-700">Score</p>
+            <div className="flex justify-center gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-indigo-600">{score}</div>
+                <div className="text-sm text-gray-500">Score</div>
               </div>
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4">
-                <p className="text-2xl font-bold text-green-600">{accuracy}%</p>
-                <p className="text-xs text-green-700">Accuracy</p>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-green-600">{accuracy}%</div>
+                <div className="text-sm text-gray-500">Accuracy</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4">
-                <p className="text-2xl font-bold text-purple-600">{currentRound}</p>
-                <p className="text-xs text-purple-700">Rounds</p>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600">{currentRound}</div>
+                <div className="text-sm text-gray-500">Rounds</div>
               </div>
             </div>
 
-            <Button onClick={() => setGameState('ready')}>
+            <Button onClick={() => setGameState('ready')} className="btn-primary">
               Play Again
             </Button>
           </div>
