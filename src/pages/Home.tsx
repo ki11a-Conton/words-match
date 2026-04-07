@@ -37,7 +37,7 @@ export default function Home() {
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-title text-white leading-tight mb-6">
                 茶里九世
                 <br />
-                <span className="text-brand-green">灵感之茶</span>
+                <span className="text-brand-primary">灵感之茶</span>
               </h1>
               
               <p className="text-xl text-white/80 max-w-xl mb-8">
@@ -71,7 +71,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl lg:text-4xl font-title text-text-primary mb-6">灵感产品</h2>
-              <div className="w-20 h-1 bg-brand-green mb-8"></div>
+              <div className="w-20 h-1 bg-brand-primary mb-8"></div>
               <p className="text-text-secondary text-lg max-w-2xl">
                 每一款都是我们用心打造的杰作，只为给您带来最纯粹的味觉享受
               </p>
@@ -157,7 +157,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <span className="text-brand-green text-sm font-medium tracking-wider uppercase">
+              <span className="text-brand-primary text-sm font-medium tracking-wider uppercase">
                 品牌故事
               </span>
               <h2 className="text-3xl lg:text-4xl font-title text-text-primary mt-4 mb-6">

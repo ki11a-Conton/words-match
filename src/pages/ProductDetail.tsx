@@ -127,7 +127,7 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-3 py-1 bg-brand-green-light text-brand-green text-sm font-medium rounded-full mb-4">
+            <span className="inline-block px-3 py-1 bg-brand-primary-light text-brand-primary text-sm font-medium rounded-full mb-4">
               {categoryLabels[product.category]}
             </span>
 
@@ -156,7 +156,7 @@ export default function ProductDetail() {
                       onClick={() => setTemperature(temp)}
                       className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         temperature === temp
-                          ? 'bg-brand-green text-white border-brand-green'
+                          ? 'bg-brand-primary text-white border-brand-primary'
                           : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
@@ -177,7 +177,7 @@ export default function ProductDetail() {
                       onClick={() => setSweetness(sweet)}
                       className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         sweetness === sweet
-                          ? 'bg-brand-green text-white border-brand-green'
+                          ? 'bg-brand-primary text-white border-brand-primary'
                           : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
@@ -198,7 +198,7 @@ export default function ProductDetail() {
                       onClick={() => setSize(s)}
                       className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         size === s
-                          ? 'bg-brand-green text-white border-brand-green'
+                          ? 'bg-brand-primary text-white border-brand-primary'
                           : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
@@ -252,7 +252,7 @@ export default function ProductDetail() {
 
             {!isAuthenticated && (
               <p className="text-gray-500 text-sm mt-4 text-center">
-                <Link to="/login" className="text-brand-green hover:underline">
+                <Link to="/login" className="text-brand-primary hover:underline">
                   登录
                 </Link>{' '}
                 后可将商品加入购物车

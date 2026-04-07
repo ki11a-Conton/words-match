@@ -17,12 +17,12 @@ export default {
     extend: {
       colors: {
         brand: {
-          green: '#00B42A',
-          'green-light': '#33C759',
-          'green-dark': '#009A22',
-          gold: '#FFD700',
-          'gold-light': '#FFDF33',
-          'gold-dark': '#E6C200',
+          primary: '#1A1A1A',
+          'primary-light': '#333333',
+          'primary-dark': '#000000',
+          accent: '#666666',
+          'accent-light': '#888888',
+          'accent-dark': '#444444',
         },
         background: {
           DEFAULT: '#FAFAFA',
