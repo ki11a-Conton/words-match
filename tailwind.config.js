@@ -17,29 +17,34 @@ export default {
     extend: {
       colors: {
         cream: {
-          50: '#FDFCFA',
-          100: '#F8F6F3',
-          200: '#E8E6E3',
-          300: '#D4D2CF',
+          50: '#FDFEFD',
+          100: '#F8FAF8',
+          200: '#E8F0E8',
+          300: '#D4E6D4',
         },
         brand: {
-          green: '#4A7C59',
-          'green-light': '#E8F0E8',
-          'green-dark': '#3A6247',
+          green: '#00B42A',
+          'green-light': '#E6F7E9',
+          'green-dark': '#009A24',
+          'green-lighter': '#F0FAF2',
         },
         milk: {
-          tea: '#D4A574',
-          'tea-light': '#E8D4B8',
+          tea: '#FFB085',
+          'tea-light': '#FFE8D8',
         },
         charcoal: {
-          DEFAULT: '#2D2D2D',
+          DEFAULT: '#333333',
           light: '#4A4A4A',
-          muted: '#6B6B6B',
+          muted: '#666666',
+        },
+        white: {
+          DEFAULT: '#FFFFFF',
+          'off': '#F9FAFB',
         },
       },
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
+        display: ['PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+        sans: ['PingFang SC', 'Microsoft YaHei', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'display-xl': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
