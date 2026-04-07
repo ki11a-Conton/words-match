@@ -17,50 +17,50 @@ export default {
     extend: {
       colors: {
         brand: {
-          red: '#E63946',
+          red: '#E60012',
           'red-light': '#F1A7AF',
           'red-dark': '#C41E2C',
           gold: '#FFD700',
           'gold-light': '#FFDF33',
           'gold-dark': '#E6C200',
         },
-        gray: {
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          300: '#D1D5DB',
-          400: '#9CA3AF',
-          500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827',
+        background: {
+          DEFAULT: '#FAFAFA',
         },
-        white: {
-          DEFAULT: '#FFFFFF',
+        text: {
+          primary: '#1A1A1A',
+          secondary: '#666666',
         },
-        black: {
-          DEFAULT: '#000000',
-          light: '#111111',
+        accent: {
+          'card-bg': '#F4F1EE',
+          'divider': '#E8E4DF',
         },
       },
       fontFamily: {
-        display: ['PingFang SC', 'Microsoft YaHei', 'sans-serif'],
-        sans: ['PingFang SC', 'Microsoft YaHei', 'system-ui', 'sans-serif'],
+        sans: ['system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', 'sans-serif'],
       },
-      fontSize: {
-        'display-xl': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-        'display-lg': ['2.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
-        'display-md': ['2rem', { lineHeight: '1.3' }],
-        'display-sm': ['1.5rem', { lineHeight: '1.4' }],
+      fontWeight: {
+        'title': 700,
+        'body': 400,
+      },
+      lineHeight: {
+        'body': '1.6',
+      },
+      letterSpacing: {
+        'body': '0.02em',
       },
       spacing: {
-        '18': '4.5rem',
-        '22': '5.5rem',
-        '30': '7.5rem',
+        '1': '4px',
+        '2': '8px',
+        '3': '12px',
+        '4': '16px',
+        '6': '24px',
+        '8': '32px',
+        '12': '48px',
+        '16': '64px',
       },
       borderRadius: {
-        '4xl': '2rem',
+        'card': '12px',
       },
       boxShadow: {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',

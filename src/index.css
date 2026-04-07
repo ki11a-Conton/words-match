@@ -5,13 +5,14 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-family: 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
 }
 
 @layer base {
@@ -20,12 +21,16 @@
   }
   
   body {
-    @apply bg-white text-black min-h-screen;
+    @apply bg-background text-text-primary min-h-screen;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    @apply font-medium tracking-tight;
+    font-family: 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    @apply font-title tracking-tight;
+  }
+  
+  p {
+    @apply font-body leading-body;
   }
   
   ::selection {
@@ -35,26 +40,26 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-3 
-           bg-brand-red text-white text-sm font-medium tracking-wide
-           rounded-lg transition-all duration-300 ease-out
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-brand-red text-white text-sm font-medium tracking-body
+           rounded-card transition-all duration-300 ease-out
            hover:bg-brand-red-dark hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
            focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2;
   }
   
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-3 
-           bg-transparent text-black text-sm font-medium tracking-wide
-           border border-gray-200 rounded-lg transition-all duration-300 ease-out
-           hover:border-gray-300 hover:bg-gray-50
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-transparent text-text-primary text-sm font-medium tracking-body
+           border border-accent-divider rounded-card transition-all duration-300 ease-out
+           hover:border-accent-divider hover:bg-accent-card-bg
            focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2;
   }
   
   .btn-accent {
-    @apply inline-flex items-center justify-center px-8 py-3 
-           bg-brand-gold text-black text-sm font-medium tracking-wide
-           rounded-lg transition-all duration-300 ease-out
+    @apply inline-flex items-center justify-center px-6 py-3 
+           bg-brand-gold text-text-primary text-sm font-medium tracking-body
+           rounded-card transition-all duration-300 ease-out
            hover:bg-brand-gold-light hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
            focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2;
@@ -62,15 +67,15 @@
   
   .input-field {
     @apply w-full px-0 py-3 bg-transparent 
-           border-0 border-b border-gray-200 
-           text-black placeholder:text-gray-400
+           border-0 border-b border-accent-divider 
+           text-text-primary placeholder:text-text-secondary
            focus:outline-none focus:border-brand-red focus:ring-0
            transition-colors duration-200;
   }
   
   .card {
-    @apply bg-white rounded-2xl shadow-soft transition-all duration-300
-           hover:shadow-lg;
+    @apply bg-accent-card-bg rounded-card shadow-soft transition-all duration-300
+           hover:shadow-lg p-6;
   }
   
   .product-card {
@@ -84,15 +89,15 @@
   }
   
   .section-title {
-    @apply text-display-md text-black mb-4;
+    @apply text-display-md text-text-primary mb-4;
   }
   
   .section-subtitle {
-    @apply text-gray-500 text-lg max-w-2xl mx-auto;
+    @apply text-text-secondary text-lg max-w-2xl mx-auto;
   }
   
   .nav-link {
-    @apply text-sm text-gray-500 hover:text-black 
+    @apply text-sm text-text-secondary hover:text-text-primary 
            transition-colors duration-200 relative
            after:content-[''] after:absolute after:bottom-0 after:left-0 
            after:w-0 after:h-px after:bg-brand-red
@@ -101,7 +106,7 @@
   }
   
   .nav-link-active {
-    @apply text-black after:w-full;
+    @apply text-text-primary after:w-full;
   }
 }
 
