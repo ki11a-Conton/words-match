@@ -8,7 +8,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <Link to={`/products/${product.id}`} className="product-card block">
+    <Link to={`/products/${product.id}`} className="product-card block group">
       <div className="relative overflow-hidden">
         <img
           src={product.image}

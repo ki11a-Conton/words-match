@@ -74,7 +74,7 @@
   }
   
   .product-card {
-    @apply card overflow-hidden cursor-pointer group;
+    @apply card overflow-hidden cursor-pointer;
   }
   
   .product-card-image {
