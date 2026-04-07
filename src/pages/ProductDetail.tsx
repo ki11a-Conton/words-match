@@ -65,14 +65,14 @@ export default function ProductDetail() {
     return (
       <div className="container mx-auto px-4 lg:px-8 py-16">
         <div className="animate-pulse">
-          <div className="h-8 w-24 bg-cream-200 rounded mb-8" />
+          <div className="h-8 w-24 bg-gray-200 rounded mb-8" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="aspect-square bg-cream-200 rounded-2xl" />
+            <div className="aspect-square bg-gray-200 rounded-2xl" />
             <div className="space-y-6">
-              <div className="h-10 bg-cream-200 rounded w-2/3" />
-              <div className="h-6 bg-cream-200 rounded w-1/4" />
-              <div className="h-24 bg-cream-200 rounded" />
-              <div className="h-12 bg-cream-200 rounded w-1/3" />
+              <div className="h-10 bg-gray-200 rounded w-2/3" />
+              <div className="h-6 bg-gray-200 rounded w-1/4" />
+              <div className="h-24 bg-gray-200 rounded" />
+              <div className="h-12 bg-gray-200 rounded w-1/3" />
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function ProductDetail() {
       <div className="container mx-auto px-4 lg:px-8 py-8 lg:py-16">
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 text-charcoal-muted hover:text-charcoal transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>返回产品列表</span>
@@ -113,7 +113,7 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="aspect-square rounded-2xl overflow-hidden bg-cream-100">
+            <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100">
               <img
                 src={product.image}
                 alt={product.name}
@@ -127,20 +127,20 @@ export default function ProductDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block px-3 py-1 bg-brand-green-light text-brand-green text-sm font-medium rounded-full mb-4">
+            <span className="inline-block px-3 py-1 bg-brand-red-light text-brand-red text-sm font-medium rounded-full mb-4">
               {categoryLabels[product.category]}
             </span>
 
-            <h1 className="text-display-md text-charcoal mb-4">{product.name}</h1>
+            <h1 className="text-display-md text-black mb-4">{product.name}</h1>
 
-            <p className="text-charcoal-muted text-lg leading-relaxed mb-6">
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
               {product.description}
             </p>
 
-            <div className="text-3xl font-display text-charcoal mb-8">
+            <div className="text-3xl font-display text-black mb-8">
               ¥{product.price.toFixed(0)}
               {size !== 'medium' && (
-                <span className="text-base text-charcoal-muted ml-2">
+                <span className="text-base text-gray-500 ml-2">
                   ({{ medium: '中杯', large: '大杯 +¥3', extra_large: '超大杯 +¥6' }[size]})
                 </span>
               )}
@@ -148,16 +148,16 @@ export default function ProductDetail() {
 
             {temperatures.length > 1 && (
               <div className="mb-6">
-                <label className="block text-sm font-medium text-charcoal mb-3">温度</label>
+                <label className="block text-sm font-medium text-black mb-3">温度</label>
                 <div className="flex flex-wrap gap-3">
                   {temperatures.map((temp) => (
                     <button
                       key={temp}
                       onClick={() => setTemperature(temp)}
-                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         temperature === temp
-                          ? 'bg-charcoal text-white'
-                          : 'bg-cream-100 text-charcoal-muted hover:bg-cream-200'
+                          ? 'bg-brand-red text-white border-brand-red'
+                          : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
                       {temperatureLabels[temp]}
@@ -169,16 +169,16 @@ export default function ProductDetail() {
 
             {sweetnesses.length > 1 && (
               <div className="mb-6">
-                <label className="block text-sm font-medium text-charcoal mb-3">甜度</label>
+                <label className="block text-sm font-medium text-black mb-3">甜度</label>
                 <div className="flex flex-wrap gap-3">
                   {sweetnesses.map((sweet) => (
                     <button
                       key={sweet}
                       onClick={() => setSweetness(sweet)}
-                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         sweetness === sweet
-                          ? 'bg-charcoal text-white'
-                          : 'bg-cream-100 text-charcoal-muted hover:bg-cream-200'
+                          ? 'bg-brand-red text-white border-brand-red'
+                          : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
                       {sweetnessLabels[sweet]}
@@ -190,16 +190,16 @@ export default function ProductDetail() {
 
             {sizes.length > 1 && (
               <div className="mb-8">
-                <label className="block text-sm font-medium text-charcoal mb-3">杯型</label>
+                <label className="block text-sm font-medium text-black mb-3">杯型</label>
                 <div className="flex flex-wrap gap-3">
                   {sizes.map((s) => (
                     <button
                       key={s}
                       onClick={() => setSize(s)}
-                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 border-2 ${
                         size === s
-                          ? 'bg-charcoal text-white'
-                          : 'bg-cream-100 text-charcoal-muted hover:bg-cream-200'
+                          ? 'bg-brand-red text-white border-brand-red'
+                          : 'bg-white text-black border-gray-300 hover:bg-gray-50'
                       }`}
                     >
                       {sizeLabels[s]}
@@ -212,18 +212,18 @@ export default function ProductDetail() {
             )}
 
             <div className="mb-8">
-              <label className="block text-sm font-medium text-charcoal mb-3">数量</label>
+              <label className="block text-sm font-medium text-black mb-3">数量</label>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center hover:bg-cream-200 transition-colors"
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
                 <span className="text-lg font-medium w-12 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-full bg-cream-100 flex items-center justify-center hover:bg-cream-200 transition-colors"
+                  className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -251,8 +251,8 @@ export default function ProductDetail() {
             </div>
 
             {!isAuthenticated && (
-              <p className="text-charcoal-muted text-sm mt-4 text-center">
-                <Link to="/login" className="text-brand-green hover:underline">
+              <p className="text-gray-500 text-sm mt-4 text-center">
+                <Link to="/login" className="text-brand-red hover:underline">
                   登录
                 </Link>{' '}
                 后可将商品加入购物车
