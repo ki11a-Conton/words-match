@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-family: 'Barlow', 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-synthesis: none;
@@ -25,7 +25,7 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-family: 'Barlow', 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', sans-serif;
     @apply font-title tracking-tight;
   }
   

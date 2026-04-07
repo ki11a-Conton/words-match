@@ -37,7 +37,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', 'sans-serif'],
+        sans: ['Barlow', 'system-ui', '-apple-system', 'PingFang SC', 'Helvetica Neue', 'sans-serif'],
       },
       fontWeight: {
         'title': 700,
