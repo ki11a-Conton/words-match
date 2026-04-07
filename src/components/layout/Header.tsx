@@ -73,7 +73,7 @@ export default function Header() {
     },
   ];
 
-  const mobileQuickLinks = [
+  const getMobileQuickLinks = () => [
     { path: '/', icon: <Home className="w-5 h-5" />, label: '首页' },
     { path: '/products', icon: <Coffee className="w-5 h-5" />, label: '菜单' },
     { path: '/stores', icon: <MapPin className="w-5 h-5" />, label: '门店' },
@@ -113,28 +113,25 @@ export default function Header() {
                     {link.label}
                   </Link>
                   
-                  <AnimatePresence>
-                    {hoveredNav === link.path && link.dropdown && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.3, ease: 'ease-out' }}
-                        className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[600px] bg-white rounded-card shadow-lg py-6 px-8 z-50"
-                        onMouseEnter={() => setHoveredNav(link.path)}
-                        onMouseLeave={() => setHoveredNav(null)}
-                      >
-                        <div className="grid grid-cols-2 gap-6">
-                          {link.dropdown.map((item, index) => (
-                            <div key={index} className="flex flex-col gap-2 p-3 rounded-lg hover:bg-accent-card-bg transition-colors">
-                              <h3 className="text-text-primary font-title text-sm">{item.title}</h3>
-                              <p className="text-text-secondary text-xs">{item.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {hoveredNav === link.path && link.dropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, ease: 'ease-out' }}
+                      className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[600px] bg-white rounded-card shadow-lg py-6 px-8 z-50"
+                      onMouseEnter={() => setHoveredNav(link.path)}
+                      onMouseLeave={() => setHoveredNav(null)}
+                    >
+                      <div className="grid grid-cols-2 gap-6">
+                        {link.dropdown.map((item, index) => (
+                          <div key={index} className="flex flex-col gap-2 p-3 rounded-lg hover:bg-accent-card-bg transition-colors">
+                            <h3 className="text-text-primary font-title text-sm">{item.title}</h3>
+                            <p className="text-text-secondary text-xs">{item.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
               ))}
             </div>
@@ -187,41 +184,38 @@ export default function Header() {
                     <span className="hidden lg:inline text-sm">{user?.name}</span>
                   </button>
 
-                  <AnimatePresence>
-                    {showUserMenu && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.3, ease: 'ease-out' }}
-                        className="absolute right-0 mt-2 w-48 bg-white rounded-card shadow-lg py-2 z-50"
+                  {showUserMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, ease: 'ease-out' }}
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-card shadow-lg py-2 z-50"
+                    >
+                      <Link
+                        to="/orders"
+                        onClick={() => setShowUserMenu(false)}
+                        className="block px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-accent-card-bg transition-colors"
                       >
+                        我的订单
+                      </Link>
+                      {user?.role === 'admin' && (
                         <Link
-                          to="/orders"
+                          to="/admin"
                           onClick={() => setShowUserMenu(false)}
                           className="block px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-accent-card-bg transition-colors"
                         >
-                          我的订单
+                          管理后台
                         </Link>
-                        {user?.role === 'admin' && (
-                          <Link
-                            to="/admin"
-                            onClick={() => setShowUserMenu(false)}
-                            className="block px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-accent-card-bg transition-colors"
-                          >
-                            管理后台
-                          </Link>
-                        )}
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-accent-card-bg flex items-center gap-2 transition-colors"
-                        >
-                          <LogOut className="w-4 h-4" />
-                          退出登录
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-text-secondary hover:text-text-primary hover:bg-accent-card-bg flex items-center gap-2 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        退出登录
+                      </button>
+                    </motion.div>
+                  )}
                 </div>
               ) : (
                 <Link
@@ -248,12 +242,10 @@ export default function Header() {
             </div>
           </div>
 
-          <AnimatePresence>
             {isMobileMenuOpen && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3, ease: 'ease-out' }}
                 className={`lg:hidden border-t ${isScrolled ? 'border-accent-divider' : 'border-white/20'} py-4`}
               >
@@ -275,13 +267,12 @@ export default function Header() {
                 </nav>
               </motion.div>
             )}
-          </AnimatePresence>
         </div>
       </header>
 
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-accent-divider z-40">
         <div className="flex justify-around items-center h-16">
-          {mobileQuickLinks.map((link) => (
+          {getMobileQuickLinks().map((link) => (
             <Link
               key={link.path}
               to={link.path}
