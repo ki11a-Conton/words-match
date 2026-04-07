@@ -17,9 +17,9 @@ export default {
     extend: {
       colors: {
         brand: {
-          red: '#E60012',
-          'red-light': '#F1A7AF',
-          'red-dark': '#C41E2C',
+          green: '#00B42A',
+          'green-light': '#33C759',
+          'green-dark': '#009A22',
           gold: '#FFD700',
           'gold-light': '#FFDF33',
           'gold-dark': '#E6C200',

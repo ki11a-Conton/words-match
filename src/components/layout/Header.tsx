@@ -268,7 +268,7 @@ export default function Header() {
               key={link.path}
               to={link.path}
               className={`flex flex-col items-center justify-center gap-1 p-2 transition-all duration-300 hover:scale-102 active:scale-98 ${
-                isActive(link.path) ? 'text-brand-red' : 'text-text-secondary'
+                isActive(link.path) ? 'text-brand-green' : 'text-text-secondary'
               }`}
               aria-label={link.label}
             >
