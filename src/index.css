@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans SC', system-ui, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-cream-100 text-charcoal min-h-screen;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    @apply font-medium tracking-tight;
+  }
+  
+  ::selection {
+    @apply bg-brand-green text-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3 
+           bg-charcoal text-white text-sm font-medium tracking-wide
+           rounded-lg transition-all duration-300 ease-out
+           hover:bg-charcoal-light hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3 
+           bg-transparent text-charcoal text-sm font-medium tracking-wide
+           border border-charcoal/20 rounded-lg transition-all duration-300 ease-out
+           hover:border-charcoal hover:bg-charcoal/5
+           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+  }
+  
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-8 py-3 
+           bg-brand-green text-white text-sm font-medium tracking-wide
+           rounded-lg transition-all duration-300 ease-out
+           hover:bg-brand-green-dark hover:shadow-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+  }
+  
+  .input-field {
+    @apply w-full px-0 py-3 bg-transparent 
+           border-0 border-b border-charcoal/20 
+           text-charcoal placeholder:text-charcoal-muted
+           focus:outline-none focus:border-brand-green focus:ring-0
+           transition-colors duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-card transition-all duration-300
+           hover:shadow-card-hover;
+  }
+  
+  .product-card {
+    @apply card overflow-hidden cursor-pointer group;
+  }
+  
+  .product-card-image {
+    @apply w-full aspect-square object-cover 
+           transition-transform duration-500 ease-out
+           group-hover:scale-105;
+  }
+  
+  .section-title {
+    @apply text-display-md text-charcoal mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-charcoal-muted text-lg max-w-2xl mx-auto;
+  }
+  
+  .nav-link {
+    @apply text-sm text-charcoal-muted hover:text-charcoal 
+           transition-colors duration-200 relative
+           after:content-[''] after:absolute after:bottom-0 after:left-0 
+           after:w-0 after:h-px after:bg-brand-green
+           after:transition-all after:duration-300
+           hover:after:w-full;
+  }
+  
+  .nav-link-active {
+    @apply text-charcoal after:w-full;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-hero {
+    background: linear-gradient(180deg, #F8F6F3 0%, #E8F0E8 100%);
+  }
+  
+  .gradient-subtle {
+    background: linear-gradient(135deg, #F8F6F3 0%, #E8E6E3 100%);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cream-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-charcoal/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-charcoal/30;
+}

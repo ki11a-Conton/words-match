@@ -1,0 +1,86 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  password  String
+  name      String
+  role      String     @default("user")
+  cartItems CartItem[]
+  orders    Order[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  category    String
+  image       String
+  temperature String      @default("cold,hot")
+  sweetness   String      @default("full,seventy,fifty,thirty,none")
+  size        String      @default("medium,large,extra_large")
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model CartItem {
+  id          String   @id @default(uuid())
+  userId      String
+  productId   String
+  quantity    Int
+  temperature String
+  sweetness   String
+  size        String
+  price       Float
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, productId, temperature, sweetness, size])
+}
+
+model Order {
+  id              String       @id @default(uuid())
+  userId          String
+  total           Float
+  status          String       @default("pending")
+  recipientName   String
+  recipientPhone  String
+  address         String
+  city            String
+  postalCode      String
+  stripePaymentId String?
+  stripeSessionId String?
+  items           OrderItem[]
+  user            User         @relation(fields: [userId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String
+  productId   String
+  productName String
+  productImage String
+  quantity    Int
+  price       Float
+  temperature String
+  sweetness   String
+  size        String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id])
+}
