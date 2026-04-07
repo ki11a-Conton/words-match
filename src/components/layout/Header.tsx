@@ -114,11 +114,8 @@ export default function Header() {
                   </Link>
                   
                   {hoveredNav === link.path && link.dropdown && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, ease: 'ease-out' }}
-                      className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[600px] bg-white rounded-card shadow-lg py-6 px-8 z-50"
+                    <div
+                      className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[600px] bg-white rounded-card shadow-lg py-6 px-8 z-50 opacity-100"
                       onMouseEnter={() => setHoveredNav(link.path)}
                       onMouseLeave={() => setHoveredNav(null)}
                     >
@@ -130,7 +127,7 @@ export default function Header() {
                           </div>
                         ))}
                       </div>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
               ))}
@@ -185,11 +182,8 @@ export default function Header() {
                   </button>
 
                   {showUserMenu && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, ease: 'ease-out' }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-card shadow-lg py-2 z-50"
+                    <div
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-card shadow-lg py-2 z-50 opacity-100"
                     >
                       <Link
                         to="/orders"
@@ -214,7 +208,7 @@ export default function Header() {
                         <LogOut className="w-4 h-4" />
                         退出登录
                       </button>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
               ) : (
@@ -243,11 +237,8 @@ export default function Header() {
           </div>
 
             {isMobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                transition={{ duration: 0.3, ease: 'ease-out' }}
-                className={`lg:hidden border-t ${isScrolled ? 'border-accent-divider' : 'border-white/20'} py-4`}
+              <div
+                className={`lg:hidden border-t ${isScrolled ? 'border-accent-divider' : 'border-white/20'} py-4 opacity-100`}
               >
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
@@ -265,7 +256,7 @@ export default function Header() {
                     </Link>
                   ))}
                 </nav>
-              </motion.div>
+              </div>
             )}
         </div>
       </header>
