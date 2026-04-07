@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Noto Sans SC', system-ui, sans-serif;
+  font-family: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-synthesis: none;
@@ -20,7 +20,7 @@
   }
   
   body {
-    @apply bg-cream-100 text-charcoal min-h-screen;
+    @apply bg-white text-black min-h-screen;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -29,48 +29,48 @@
   }
   
   ::selection {
-    @apply bg-brand-green text-white;
+    @apply bg-brand-red text-white;
   }
 }
 
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center px-8 py-3 
-           bg-charcoal text-white text-sm font-medium tracking-wide
+           bg-brand-red text-white text-sm font-medium tracking-wide
            rounded-lg transition-all duration-300 ease-out
-           hover:bg-charcoal-light hover:shadow-lg hover:-translate-y-0.5
+           hover:bg-brand-red-dark hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
-           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2;
   }
   
   .btn-secondary {
     @apply inline-flex items-center justify-center px-8 py-3 
-           bg-transparent text-charcoal text-sm font-medium tracking-wide
-           border border-charcoal/20 rounded-lg transition-all duration-300 ease-out
-           hover:border-charcoal hover:bg-charcoal/5
-           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+           bg-transparent text-black text-sm font-medium tracking-wide
+           border border-gray-200 rounded-lg transition-all duration-300 ease-out
+           hover:border-gray-300 hover:bg-gray-50
+           focus:outline-none focus:ring-2 focus:ring-brand-red focus:ring-offset-2;
   }
   
   .btn-accent {
     @apply inline-flex items-center justify-center px-8 py-3 
-           bg-brand-green text-white text-sm font-medium tracking-wide
+           bg-brand-gold text-black text-sm font-medium tracking-wide
            rounded-lg transition-all duration-300 ease-out
-           hover:bg-brand-green-dark hover:shadow-lg hover:-translate-y-0.5
+           hover:bg-brand-gold-light hover:shadow-lg hover:-translate-y-0.5
            active:translate-y-0 active:shadow-md
-           focus:outline-none focus:ring-2 focus:ring-brand-green focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2;
   }
   
   .input-field {
     @apply w-full px-0 py-3 bg-transparent 
-           border-0 border-b border-charcoal/20 
-           text-charcoal placeholder:text-charcoal-muted
-           focus:outline-none focus:border-brand-green focus:ring-0
+           border-0 border-b border-gray-200 
+           text-black placeholder:text-gray-400
+           focus:outline-none focus:border-brand-red focus:ring-0
            transition-colors duration-200;
   }
   
   .card {
-    @apply bg-white rounded-2xl shadow-card transition-all duration-300
-           hover:shadow-card-hover;
+    @apply bg-white rounded-2xl shadow-soft transition-all duration-300
+           hover:shadow-lg;
   }
   
   .product-card {
@@ -84,24 +84,24 @@
   }
   
   .section-title {
-    @apply text-display-md text-charcoal mb-4;
+    @apply text-display-md text-black mb-4;
   }
   
   .section-subtitle {
-    @apply text-charcoal-muted text-lg max-w-2xl mx-auto;
+    @apply text-gray-500 text-lg max-w-2xl mx-auto;
   }
   
   .nav-link {
-    @apply text-sm text-charcoal-muted hover:text-charcoal 
+    @apply text-sm text-gray-500 hover:text-black 
            transition-colors duration-200 relative
            after:content-[''] after:absolute after:bottom-0 after:left-0 
-           after:w-0 after:h-px after:bg-brand-green
+           after:w-0 after:h-px after:bg-brand-red
            after:transition-all after:duration-300
            hover:after:w-full;
   }
   
   .nav-link-active {
-    @apply text-charcoal after:w-full;
+    @apply text-black after:w-full;
   }
 }
 
@@ -110,12 +110,11 @@
     text-wrap: balance;
   }
   
-  .gradient-hero {
-    background: linear-gradient(180deg, #F8F6F3 0%, #E8F0E8 100%);
-  }
-  
-  .gradient-subtle {
-    background: linear-gradient(135deg, #F8F6F3 0%, #E8E6E3 100%);
+  .parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }
 
@@ -125,13 +124,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-cream-200;
+  @apply bg-gray-100;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-charcoal/20 rounded-full;
+  @apply bg-gray-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-charcoal/30;
+  @apply bg-gray-400;
 }
