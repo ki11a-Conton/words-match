@@ -11,7 +11,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <Link to="/" className="inline-block">
               <span className="font-display text-3xl text-white tracking-tight">
-                Milky
+                茶里九世
               </span>
             </Link>
             <p className="mt-4 text-white/60 max-w-md leading-relaxed">
@@ -70,7 +70,7 @@ export default function Footer() {
             <ul className="space-y-3 text-white/60">
               <li>客服热线: 400-888-8888</li>
               <li>营业时间: 10:00 - 22:00</li>
-              <li>邮箱: hello@milky.com</li>
+              <li>邮箱: hello@chalijiushi.com</li>
               <li>地址: 上海市静安区南京西路1688号</li>
             </ul>
           </div>
@@ -78,7 +78,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-white/40 text-sm">
-            © {currentYear} Milky. All rights reserved.
+            © {currentYear} 茶里九世. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-white/40">
             <a href="#" className="hover:text-white/60 transition-colors">

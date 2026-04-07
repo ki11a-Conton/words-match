@@ -198,7 +198,7 @@ export default function Home() {
                 源于热爱，忠于品质
               </h2>
               <p className="text-white/70 leading-relaxed mb-6">
-                Milky诞生于对茶饮文化的热爱。我们相信，一杯好茶不仅仅是饮品，更是一种生活态度的体现。从原料选择到制作工艺，每一个环节我们都精益求精。
+                茶里九世诞生于对茶饮文化的热爱。我们相信，一杯好茶不仅仅是饮品，更是一种生活态度的体现。从原料选择到制作工艺，每一个环节我们都精益求精。
               </p>
               <p className="text-white/70 leading-relaxed mb-8">
                 我们与优质茶园建立长期合作，确保每一片茶叶都来自最佳产地。新鲜水果每日配送，只为给您呈现最纯正的风味。这不仅是我们的承诺，更是我们的坚持。
@@ -218,7 +218,7 @@ export default function Home() {
               <div className="aspect-[4/5] rounded-4xl overflow-hidden">
                 <img
                   src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=premium%20milk%20tea%20shop%20interior%2C%20minimalist%20design%2C%20natural%20light%2C%20wooden%20furniture%2C%20green%20plants%2C%20cozy%20atmosphere%2C%20professional%20interior%20photography&image_size=portrait_4_3"
-                  alt="Milky Store"
+                  alt="茶里九世门店"
                   className="w-full h-full object-cover"
                 />
               </div>

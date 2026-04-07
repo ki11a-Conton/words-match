@@ -50,7 +50,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-18 lg:h-22">
           <Link to="/" className="flex items-center gap-2">
             <span className="font-display text-2xl lg:text-3xl text-charcoal tracking-tight">
-              Milky
+              茶里九世
             </span>
           </Link>
 

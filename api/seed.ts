@@ -126,24 +126,24 @@ async function main() {
   
   await prisma.user.create({
     data: {
-      email: 'admin@milky.com',
+      email: 'admin@chalijiushi.com',
       password: hashedPassword,
       name: 'Admin',
       role: 'admin',
     },
   });
-  console.log('已创建管理员账户: admin@milky.com (密码: admin123)');
+  console.log('已创建管理员账户: admin@chalijiushi.com (密码: admin123)');
 
   const testUserPassword = await bcrypt.hash('test123', 10);
   await prisma.user.create({
     data: {
-      email: 'test@milky.com',
+      email: 'test@chalijiushi.com',
       password: testUserPassword,
       name: 'Test User',
       role: 'user',
     },
   });
-  console.log('已创建测试账户: test@milky.com (密码: test123)');
+  console.log('已创建测试账户: test@chalijiushi.com (密码: test123)');
 
   console.log('数据库填充完成！');
 }

@@ -48,7 +48,7 @@ export default function Login() {
         >
           <Link to="/" className="inline-block">
             <span className="font-display text-3xl text-charcoal tracking-tight">
-              Milky
+              茶里九世
             </span>
           </Link>
           <h1 className="text-display-sm text-charcoal mt-6 mb-2">欢迎回来</h1>
