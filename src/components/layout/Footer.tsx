@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Weibo, Mail, Wechat } from 'lucide-react';
+import { Instagram, Mail, MessageSquare, Globe } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -28,13 +28,13 @@ export default function Footer() {
                 href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-colors"
               >
-                <Weibo className="w-5 h-5" />
+                <Globe className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-colors"
               >
-                <Wechat className="w-5 h-5" />
+                <MessageSquare className="w-5 h-5" />
               </a>
               <a
                 href="#"

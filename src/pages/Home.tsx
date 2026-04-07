@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowRight, Coffee, Leaf, Award, Sparkles, MapPin, Instagram, Weibo, Wechat } from 'lucide-react';
+import { ArrowDown, ArrowRight, Coffee, Leaf, Award, Sparkles, MapPin, Instagram, Globe, MessageSquare } from 'lucide-react';
 import ProductCard from '../components/product/ProductCard';
 import { productApi } from '../services/api';
 import type { Product } from '../types';
@@ -358,10 +358,10 @@ export default function Home() {
                     <Instagram className="w-6 h-6" />
                   </a>
                   <a href="#" className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center hover:bg-brand-red hover:text-white transition-colors">
-                    <Weibo className="w-6 h-6" />
+                    <Globe className="w-6 h-6" />
                   </a>
                   <a href="#" className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center hover:bg-brand-red hover:text-white transition-colors">
-                    <Wechat className="w-6 h-6" />
+                    <MessageSquare className="w-6 h-6" />
                   </a>
                 </div>
               </div>
